@@ -1,8 +1,12 @@
+var coords = [];
+
 function initMap() {
-  var uluru = {lat: 13.0846, lng: 80.2179};
+  var chennai = {lat: 13.0846, lng: 80.2179};
+  var input = /** @type {!HTMLInputElement} */(
+      document.getElementById('pac-input'));
   var map = new google.maps.Map(document.getElementById('map'), {
     zoom: 12,
-    center: uluru,
+    center: chennai,
     styles: [
       {"featureType":"all","elementType":"labels.text.fill",
         "stylers":[{"saturation":36},{"color":"#000000"},{"lightness":40}]},
@@ -39,37 +43,43 @@ function initMap() {
     ]
   });
 
-  var contentString = '<div id="content">'+
-      '<div id="siteNotice">'+
-      '</div>'+
-      '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
-      '<div id="bodyContent">'+
-      '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
-      'sandstone rock formation in the southern part of the '+
-      'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
-      'south west of the nearest large town, Alice Springs; 450&#160;km '+
-      '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
-      'features of the Uluru - Kata Tjuta National Park. Uluru is '+
-      'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
-      'Aboriginal people of the area. It has many springs, waterholes, '+
-      'rock caves and ancient paintings. Uluru is listed as a World '+
-      'Heritage Site.</p>'+
-      '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
-      'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
-      '(last visited June 22, 2009).</p>'+
-      '</div>'+
-      '</div>';
+  var contentString = '';
+
+  var autocomplete = new google.maps.places.Autocomplete(input);
+  autocomplete.bindTo('bounds', map);
+
+  var marker = new google.maps.Marker({
+    map: map
+  });
 
   var infowindow = new google.maps.InfoWindow({
     content: contentString
   });
 
-  var marker = new google.maps.Marker({
-    position: uluru,
-    map: map,
-    title: 'Uluru (Ayers Rock)'
-  });
-  marker.addListener('click', function() {
-    infowindow.open(map, marker);
-  });
+  autocomplete.addListener('place_changed', function() {
+    try {
+      infowindow.close();
+    }
+    catch (err) {
+      contentString = '';
+    }
+    var place = autocomplete.getPlace();
+    map.setCenter(place.geometry.location);
+    coords.push(place.geometry.location['G']);
+    coords.push(place.geometry.location['K']);
+    map.setZoom(16);
+    marker.setPosition(place.geometry.location);
+    marker.setVisible(true);
+    var title = document.getElementById('title').value;
+    var description = document.getElementById('description').value;
+    var contentString = '<h4>' + title + '</h4>' + '<br>' + '<p>' + description + '</p>';
+    marker.setTitle(title);
+    var infowindow = new google.maps.InfoWindow({
+        content: contentString
+    });
+    marker.addListener('click', function() {
+      infowindow.open(map, marker);
+    });
+
+  })
 }

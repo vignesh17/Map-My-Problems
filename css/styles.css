@@ -4,24 +4,16 @@ html, body {
     padding: 0;
 }
 
+#login-signup {
+    background: url(http://mymaplist.com/img/parallax/back.png);
+    background-color: #444;
+    background: url(http://mymaplist.com/img/parallax/pinlayer2.png),url(http://mymaplist.com/img/parallax/pinlayer1.png),url(http://mymaplist.com/img/parallax/back.png);    
+}
+
 nav.navbar.navbar-default.navbar-fixed-top.row {
 	background: none;
 	border: none;
 }
-
-.nav-pane a
-
-.nav-pane a:link {
-
-}
-
-.nav-pane a:visited {
-
-}
-
-.nav-pane a
-
-.nav-pane a
 
 .main-page {
 	background-color: #2f2f2f;
@@ -39,4 +31,74 @@ nav.navbar.navbar-default.navbar-fixed-top.row {
 
 #map {
 height: 100%;
+}
+
+.panel-title {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 16px;
+    color: white;
+    /* background-color: #F0AF3B; */
+    font-weight: 900;
+}
+
+.panel-default {
+    /* border-color: #ddd; */
+    background-color: #2f2f2f;
+}
+
+.panel-default>.panel-heading {
+    color: #333;
+    background-color: #FF9933;
+    /* border-color: #ddd; */
+}
+
+.panel-default {
+    border: none;
+    margin-top: 40%;
+}
+
+.panel-heading {
+    border: none;
+}
+
+.login-helper {
+    list-style: none;
+    display: flex;
+}
+
+.login-helper-content {
+    margin-left: 5px;
+}
+
+.login-helper-content a{
+    color: #FF9933;
+}
+
+.login-helper-content a:link {
+    color: #FF9933;
+}
+
+.login-helper-content a:visited {
+    color: #FF9933;
+}
+
+.login-helper-content a:hover {
+    color: #FB7838;
+    text-decoration: none;
+}
+
+.login-helper-content a:active {
+    color: #FB7838;
+    text-decoration: none;
+}
+
+.login-error {
+	color: #FF9933; 
+	text-align: center;
+}
+
+#insert-successful {
+	color: #FF9933;
+	margin-top: 10px;
 }
