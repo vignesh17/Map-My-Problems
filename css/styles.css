@@ -1,0 +1,42 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+nav.navbar.navbar-default.navbar-fixed-top.row {
+	background: none;
+	border: none;
+}
+
+.nav-pane a
+
+.nav-pane a:link {
+
+}
+
+.nav-pane a:visited {
+
+}
+
+.nav-pane a
+
+.nav-pane a
+
+.main-page {
+	background-color: #2f2f2f;
+}
+
+.map-holder {
+	height: 100%;
+	margin-top: 35px;
+	margin-bottom: 25px;
+}
+
+.map-pane {
+	height: 100%;
+}
+
+#map {
+height: 100%;
+}
