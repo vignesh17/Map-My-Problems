@@ -121,7 +121,7 @@
 
           var comments = "<ul>"
           for (var i in datum.comments) {
-            comments = comments + "<li>"+datum.comments[i]+"&nbsp;<strong>Posted By "+datum.user+"</strong></li>";
+            comments = comments + "<li>"+datum.comments[i]+"</li>";
           };
           comments += "</ul>";
           
