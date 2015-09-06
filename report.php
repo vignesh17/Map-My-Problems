@@ -120,10 +120,9 @@
           bounds.extend(loc);
 
           var comments = "<ul>"
-          for (var i in datum.comments) {
-            //comments = comments + "<li>"+datum.comments[i]+"&nbsp;<strong>Posted By "+datum.commenters[i]+"</strong></li>";
-            comments = comments + "<li>"+datum.comments[i]+"</li>";
-          };
+          for (var iterator = datum.comments.length - 1; iterator >= 0; iterator--) {
+            comments = comments + "<li>"+datum.comments[iterator]+"&nbsp;<strong>Posted By "+datum.commenters[iterator]+"</strong></li>";
+          }
           comments += "</ul>";
           
 
@@ -136,6 +135,7 @@
           });
           marker.title = datum.title;
           oms.addMarker(marker);
+          comments = "";
         }
         map.fitBounds(bounds);
 
@@ -255,8 +255,8 @@
             id: "'.$doc["_id"].'",
             user: "'.$_SESSION["username"].'",
             votes: '.$doc["votes"].',
-            comments: '.json_encode($doc["comments"]).',
-            commenters: '.json_encode($doc["commenters"]).',
+            comments: ['.'"'.implode('","',  $doc["comments"] ).'"'.'],
+            commenters: ['.'"'.implode('","',  $doc["commenters"] ).'"'.'],
           });
           ';
       }
