@@ -1,5 +1,8 @@
 <?php
 	ob_start();
+	error_reporting(-1);
+	ini_set('display_errors', 'On');
+	set_error_handler("var_dump");
 
 	if(!isset($_POST["name"]) or !isset($_POST["username"]) or !isset($_POST["password"]) or !isset($_POST["cpass"]) or !isset($_POST["email"])) {
 		header('Location:signup.php');
@@ -32,8 +35,10 @@
 	    'Reply-To: contact@sivasubramanyam.me' . "\r\n" .
 	    'X-Mailer: PHP/' . phpversion();
 
-	mail($to, $subject, $message, $headers);
-
-	header('Location:login.php');
+	$ma = mail($to, $subject, $message, $headers);
+	echo $ma;
+	if($ma) {
+		header('Location:login.php');
+	}
      
 ?>
