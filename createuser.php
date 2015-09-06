@@ -36,5 +36,4 @@
 
 	header('Location:login.php');
      
-}
 ?>
