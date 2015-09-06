@@ -6,7 +6,7 @@
 	$m = new MongoClient();
 	$db = $m -> map;
 	$collection = $db -> users;
-	$creds = array('username' => $username, 'password' => $password);
+	$creds = array('username' => $username, 'password' => $password, 'active' => 1);
 	$count = $collection -> count($creds);
 	if ($count) {
 		$_SESSION['username'] = $username;
