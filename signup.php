@@ -1,3 +1,7 @@
+<?php
+    ob_start();
+    session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +12,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
     <script type="text/javascript">
         window.alert = function(){};
         var defaultCSS = document.getElementById('bootstrap-css');
@@ -21,37 +26,41 @@
         });
     </script>
 </head>
+
 <body id="login-signup">
-	<script src="http://mymaplist.com/js/vendor/TweenLite.min.js"></script>
+    <script src="http://mymaplist.com/js/vendor/TweenLite.min.js"></script>
     <div class="container">
         <div class="row">
-        	<div class="col-md-4 col-md-offset-4">
-        		<div class="panel panel-default">
-    			  	<div class="panel-heading">
-    			    	<h3 class="panel-title">Sign Up</h3>
-    			 	</div>
-    			  	<div class="panel-body">
-    			    	<form accept-charset="UTF-8" role="form">
-                        <fieldset> 
-                            <div class="form-group">
-                                <input class="form-control" placeholder="Name" name="name" type="text">
-                            </div>
-    			    	  	<div class="form-group">
-    			    		    <input class="form-control" placeholder="Username" name="username" type="text">
-    			    		</div>
-    			    		<div class="form-group">
-    			    			<input class="form-control" placeholder="Password" name="password" type="password" value="">
-    			    		</div>
-                            <div class="form-group">
-                                <input class="form-control" placeholder="Confirm Password" name="cpassword" type="password" value="">
-                            </div>
-    			    		<input class="btn btn-lg btn-success btn-block" type="submit" value="Sign Up">
-    			    	</fieldset>
-    			      	</form>
-    			    </div>
-    			</div>
-    		</div>
-    	</div>
+            <div class="col-md-4 col-md-offset-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Login</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form method="post" action="createuser.php">
+                            <fieldset> 
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Name" name="name" type="text">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Email" name="email" type="text" value="">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Username" name="username" type="text">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Password" name="password" type="password" value="">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Confirm Password" name="cpassword" type="password" value="">
+                                </div>
+                                <input class="btn btn-lg btn-success btn-block" type="submit" value="Sign Up">
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script type="text/javascript">
     $(document).ready(function(){
