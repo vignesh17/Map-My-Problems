@@ -10,7 +10,7 @@
 	$name = $_POST["name"];
 	$username = $_POST["username"];
 	$pass = $_POST["password"];
-	$cpass = $_POST["cpass"];
+	$cpass = $_POST["cpassword"];
 	$email = $_POST["email"];
 
 	if(strcmp($pass, $cpass) == 0) {
