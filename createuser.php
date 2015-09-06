@@ -30,7 +30,7 @@
 
     $subject = 'subject';
 	$message = 'message';
-	$to = 'sivasubramanyama@gmail.com';
+	$to = 'contact@sivasubramanyam.me';
 	$type = 'plain'; // or HTML
 	$charset = 'utf-8';
 
