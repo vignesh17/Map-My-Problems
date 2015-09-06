@@ -121,7 +121,7 @@
 
           var comments = "<ul>"
           for (var i in datum.comments) {
-            comments = comments + "<li>"+datum.comments[i]+"&nbsp;<strong>Posted By "+datum.user+"</strong></li>";
+            comments = comments + "<li>"+datum.comments[i]+"&nbsp;<strong>Posted By "+datum.commenters[i]+"</strong></li>";
           };
           comments += "</ul>";
           
@@ -254,7 +254,8 @@
             id: "'.$doc["_id"].'",
             user: "'.$_SESSION["username"].'",
             votes: '.$doc["votes"].',
-            comments: '.json_encode($doc["comments"]).'
+            comments: '.json_encode($doc["comments"]).',
+            commenters: '.json_encode($doc["commenters"]).',
           });
           ';
       }
