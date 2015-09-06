@@ -14,8 +14,9 @@
 	$email = $_POST["email"];
 
 	if(strcmp($pass, $cpass) == 0) {
-		$pass = md5($pass);
+		$hashpass = md5($pass);
 	}
+
 	else {
 		header('Location:signup.php');
 	}
@@ -28,7 +29,7 @@
 
 	if($liveServer) {
 
-		$user = array('name' => $name, 'username' => $username, 'pass' => $pass, 'email' => $email, 'active' => 0, 'verify' => crc32($email));
+		$user = array('name' => $name, 'username' => $username, 'pass' => $hashpass, 'email' => $email, 'active' => 0, 'verify' => crc32($email));
 		$collection -> insert($user);
 	    $subject = 'Confirmation';
 		$message = 'Open this link to verify' . '<a href="map.com/verify.php?id='.crc32($email).'">map.com/verify.php?id='.crc32($email).'</a>';
@@ -57,7 +58,7 @@
 
 	else {
 
-		$user = array('name' => $name, 'username' => $username, 'pass' => $pass, 'email' => $email, 'active' => 1, 'verify' => crc32($email));
+		$user = array('name' => $name, 'username' => $username, 'pass' => $hashpass, 'email' => $email, 'active' => 1, 'verify' => crc32($email));
 		$collection -> insert($user);
 	}
 		
