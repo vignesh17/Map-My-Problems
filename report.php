@@ -119,11 +119,14 @@
           var loc = new gm.LatLng(datum.lat, datum.lon);
           bounds.extend(loc);
 
-          var comments = "<ul>"
-          for (var iterator = datum.comments.length - 1; iterator >= 0; iterator--) {
-            comments = comments + "<li>"+datum.comments[iterator]+"&nbsp;<strong>Posted By "+datum.commenters[iterator]+"</strong></li>";
+          var comments = "";
+          if(datum.comments.length > 1) {
+            comments = "<ul>";
+            for (var iterator = datum.comments.length - 1; iterator >= 0; iterator--) {
+              comments = comments + "<li>"+datum.comments[iterator]+"&nbsp;<strong>Posted By "+datum.commenters[iterator]+"</strong></li>";
+            }
+            comments += "</ul>";
           }
-          comments += "</ul>";
           
 
           var marker = new gm.Marker({
