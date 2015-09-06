@@ -13,7 +13,7 @@
 		$dt = new DateTime(date('Y-m-d'), new DateTimeZone('UTC'));
 		$ts = $dt->getTimestamp();
 		$today = new MongoDate($ts);
-		$report = array('votes' => 0, 'voters' => array(), 'title' => $title, 'description' => $description, 'location' => $location, 'coords' => $coords, 'username' => $username, 'time' => new MongoDate());
+		$report = array('comments' => array(), 'commenters' => array(), 'votes' => 0, 'voters' => array(), 'title' => $title, 'description' => $description, 'location' => $location, 'coords' => $coords, 'username' => $username, 'time' => new MongoDate());
 		$collection -> insert($report);
 		header('Location:report.php');
 	}

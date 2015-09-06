@@ -40,8 +40,8 @@ a.navbar-brand:active {
 }
 
 .map-holder {
-	height: 85%;
-	margin-top: 35px;
+	height: 93%;
+    margin-top: 10px;
 }
 
 .map-pane {

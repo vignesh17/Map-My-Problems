@@ -118,12 +118,20 @@
           var datum = window.mapData[i];
           var loc = new gm.LatLng(datum.lat, datum.lon);
           bounds.extend(loc);
+
+          var comments = "<ul>"
+          for (var i in datum.comments) {
+            comments = comments + "<li>"+datum.comments[i]+"</li>";
+          };
+          comments += "</ul>";
+          
+
           var marker = new gm.Marker({
             position: loc,
             map: map,
             icon: iconWithColor(usualColor),
             shadow: shadow,
-            info: "<h4 class='report-title'>"+datum.title+"</h4><h6>Currently voted by "+datum.votes+" people<br><br><a href='vote.php?vote=up&id="+datum.id+'&user='+datum.user+"'>"+"Vote Up</a>"+"\n"+"&nbsp;&nbsp;&nbsp;<a href='vote.php?vote=down&id="+datum.id+'&user='+datum.user+"'>"+"Vote Down</a>"+"\n"+"<br><br><br><p class='report-desc'>"+datum.html+"</p>"
+            info: "<h4 class='report-title'>"+datum.title+"</h4><h6>Currently voted by "+datum.votes+" people<br><br><a href='vote.php?vote=up&id="+datum.id+'&user='+datum.user+"'>"+"Vote Up</a>"+"\n"+"&nbsp;&nbsp;&nbsp;<a href='vote.php?vote=down&id="+datum.id+'&user='+datum.user+"'>"+"Vote Down</a>"+"\n"+"<br><br><br><p class='report-desc'>"+datum.html+"</p><br><h5>Comments</h5>"+comments+"<br><form class='form-group' method='post' action='comment.php?id="+datum.id+'&user='+datum.user+"'><div><input class='form-control' type=text name='comment'></div><br><input class='btn btn-success btn-block' type='submit' value='Post Comment'>"
           });
           marker.title = datum.title;
           oms.addMarker(marker);
@@ -245,7 +253,8 @@
             html: "'.$doc["description"] .'",
             id: "'.$doc["_id"].'",
             user: "'.$_SESSION["username"].'",
-            votes: '.$doc["votes"].'
+            votes: '.$doc["votes"].',
+            comments: '.json_encode($doc["comments"]).'
           });
           ';
       }
@@ -258,9 +267,9 @@
         $.formUtils.addValidator({
           name : 'normaltext',
           validatorFunction : function(value, $el, config, language, $form) {
-            return /^[\-\/\\1-9a-z\s]+$/i.test(value);
+            return /^[\.\-\/\\1-9a-z\s]+$/i.test(value);
           },
-          errorMessage : 'You have to enter only alphabets, numbers, slashes, hyphens and spaces',
+          errorMessage : 'Invalid characters present in the entered text.',
           errorMessageKey: 'onlyLetters'
         });
     </script>
