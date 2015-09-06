@@ -1,5 +1,6 @@
 <?php
 	ob_start();
+	session_start();
 
 	$liveServer = 0;
 	
@@ -18,6 +19,7 @@
 	}
 
 	else {
+		$_SESSION['password-mismatch'] = 1;
 		header('Location:signup.php');
 	}
 
@@ -29,39 +31,54 @@
 
 	if($liveServer) {
 
-		$user = array('name' => $name, 'username' => $username, 'pass' => $hashpass, 'email' => $email, 'active' => 0, 'verify' => crc32($email));
-		$collection -> insert($user);
-	    $subject = 'Confirmation';
-		$message = 'Open this link to verify' . '<a href="map.com/verify.php?id='.crc32($email).'">map.com/verify.php?id='.crc32($email).'</a>';
-		$to = '$email';
-		$type = 'HTML'; 
-		$charset = 'utf-8';
+		$alreadyExists = (($collection -> count(array('username' => $username))) + ($collection -> count(array('email' => $email))));
+		if(!$alreadyExists) {
+			$user = array('name' => $name, 'username' => $username, 'pass' => $hashpass, 'email' => $email, 'active' => 0, 'verify' => crc32($email));
+			$collection -> insert($user);
+		    $subject = 'Confirmation';
+			$message = 'Open this link to verify' . '<a href="map.com/verify.php?id='.crc32($email).'">map.com/verify.php?id='.crc32($email).'</a>';
+			$to = '$email';
+			$type = 'HTML'; 
+			$charset = 'utf-8';
 
-		$mail     = 'no-reply@'.str_replace('www.', '', $_SERVER['SERVER_NAME']);
-		$uniqid   = md5(uniqid(time()));
-		$headers  = 'From: '.$mail."\n";
-		$headers .= 'Reply-to: '.$mail."\n";
-		$headers .= 'Return-Path: '.$mail."\n";
-		$headers .= 'Message-ID: <'.$uniqid.'@'.$_SERVER['SERVER_NAME'].">\n";
-		$headers .= 'MIME-Version: 1.0'."\n";
-		$headers .= 'Date: '.gmdate('D, d M Y H:i:s', time())."\n";
-		$headers .= 'X-Priority: 3'."\n";
-		$headers .= 'X-MSMail-Priority: Normal'."\n";
-		$headers .= 'Content-Type: multipart/mixed;boundary="----------'.$uniqid.'"'."\n\n";
-		$headers .= '------------'.$uniqid."\n";
-		$headers .= 'Content-type: text/'.$type.';charset='.$charset.''."\n";
-		$headers .= 'Content-transfer-encoding: 7bit';
+			$mail     = 'no-reply@'.str_replace('www.', '', $_SERVER['SERVER_NAME']);
+			$uniqid   = md5(uniqid(time()));
+			$headers  = 'From: '.$mail."\n";
+			$headers .= 'Reply-to: '.$mail."\n";
+			$headers .= 'Return-Path: '.$mail."\n";
+			$headers .= 'Message-ID: <'.$uniqid.'@'.$_SERVER['SERVER_NAME'].">\n";
+			$headers .= 'MIME-Version: 1.0'."\n";
+			$headers .= 'Date: '.gmdate('D, d M Y H:i:s', time())."\n";
+			$headers .= 'X-Priority: 3'."\n";
+			$headers .= 'X-MSMail-Priority: Normal'."\n";
+			$headers .= 'Content-Type: multipart/mixed;boundary="----------'.$uniqid.'"'."\n\n";
+			$headers .= '------------'.$uniqid."\n";
+			$headers .= 'Content-type: text/'.$type.';charset='.$charset.''."\n";
+			$headers .= 'Content-transfer-encoding: 7bit';
 
-		$ma = mail($to, $subject, $message, $headers);
+			$ma = mail($to, $subject, $message, $headers);
+		}
+		else {
+			$_SESSION['username-exists'] = 1;
+			header('Location:signup.php');
+		}
 
 	}
 
 	else {
 
-		$user = array('name' => $name, 'username' => $username, 'pass' => $hashpass, 'email' => $email, 'active' => 1, 'verify' => crc32($email));
-		$collection -> insert($user);
+		$alreadyExists = (($collection -> count(array('username' => $username))) + ($collection -> count(array('email' => $email))));
+		if(!$alreadyExists) {
+			$user = array('name' => $name, 'username' => $username, 'pass' => $hashpass, 'email' => $email, 'active' => 1, 'verify' => crc32($email));
+			$collection -> insert($user);
+			header('Location:login.php');
+		}
+		else {
+			$_SESSION['username-exists'] = 1;
+			header('Location:signup.php');
+		}
+
 	}
 		
-	header('Location:login.php');
      
 ?>

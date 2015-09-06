@@ -11,6 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.2.43/jquery.form-validator.min.js"></script>
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <script type="text/javascript">
@@ -40,10 +41,10 @@
                         <form role="form" action="checklogin.php" method="post">
                         <fieldset>
                             <div class="form-group">
-                                <input class="form-control" placeholder="Username" name="username" type="text">
+                                <input class="form-control" data-validation="length alphanumeric" data-validation-length="min6" placeholder="Username" name="username" type="text">
                             </div>
                             <div class="form-group">
-                                <input class="form-control" placeholder="Password" name="password" type="password" value="">
+                                <input class="form-control" data-validation="length alphanumeric" data-validation-length="min8" placeholder="Password" name="password" type="password" value="">
                             </div>
                             <div class="form-group">
                                 <ul class="login-helper">
@@ -82,5 +83,6 @@
           });
         });
     </script>
+    <script> $.validate(); </script>
 </body>
 </html>

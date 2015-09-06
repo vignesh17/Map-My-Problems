@@ -14,6 +14,7 @@
     <meta charset="utf-8">
     <title>Map My Problems</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.2.43/jquery.form-validator.min.js"></script>
     <script src="http://maps.google.com/maps/api/js?v=3.9&amp;libraries=places&amp;sensor=false"></script>
     <script type="text/javascript" src="js/spider.js"></script>
     <script>
@@ -115,7 +116,6 @@
         var bounds = new gm.LatLngBounds();
         for (var i = 0; i < window.mapData.length; i ++) {
           var datum = window.mapData[i];
-          console.log(datum);
           var loc = new gm.LatLng(datum.lat, datum.lon);
           bounds.extend(loc);
           var marker = new gm.Marker({
@@ -142,33 +142,40 @@
             var location = $("#pac-input").val();
             var dataString = {'title': title, 'description': description, 'location': location, 'coords': coords};
             
-            $.ajax({
+            if(coords.length == 0) {
+                  document.getElementById('insert-successful').innerHTML = 'Invalid Location';
+            }
 
-              type: "POST",
-              url: "createcomplaint.php",
-              data: dataString,
-              cache: true,
-              success: function (html) {
+            else {
 
-                document.getElementById('title').value = '';
-                document.getElementById('description').value = '';
-                document.getElementById('pac-input').value = '';
-                document.getElementById('insert-successful').innerHTML = 'Report created successfully.';
+              $.ajax({
 
-                var loc = new google.maps.LatLng(coords[0], coords[1]);
-                bounds.extend(loc);
-                var marker = new google.maps.Marker({
-                  position: loc,
-                  map: map,
-                  icon: iconWithColor(usualColor),
-                  shadow: shadow,
-                  info: "<h4 class='report-title'>"+title+"</h4>\n"+"<br><p class='report-desc'>"+description+"</p>"
-                });
+                type: "POST",
+                url: "createcomplaint.php",
+                data: dataString,
+                cache: true,
+                success: function (html) {
 
-                oms.addMarker(marker);  
+                  document.getElementById('title').value = '';
+                  document.getElementById('description').value = '';
+                  document.getElementById('pac-input').value = '';
 
-              }
-            });
+                  var loc = new google.maps.LatLng(coords[0], coords[1]);
+                  bounds.extend(loc);
+                  var marker = new google.maps.Marker({
+                    position: loc,
+                    map: map,
+                    icon: iconWithColor(usualColor),
+                    shadow: shadow,
+                    info: "<h4 class='report-title'>"+title+"</h4>\n"+"<br><p class='report-desc'>"+description+"</p>"
+                  });
+
+                  oms.addMarker(marker);  
+                  document.getElementById('insert-successful').innerHTML = 'Report created successfully.';
+
+                }
+              });
+            }
 
           });
         });
@@ -198,10 +205,10 @@
           <form action="" method="post" name="form">
             <fieldset>
               <div class="form-group">
-                <input class="form-control" placeholder="Complaint Title" name="title" id="title" type="text">
+                <input class="form-control" data-validation="length normaltext" data-validation-length="min8" placeholder="Complaint Title" name="title" id="title" type="text">
               </div>
               <div class="form-group">
-                <textarea class="form-control" name="description" id="description" placeholder="Complaint Description" rows="4"></textarea>
+                <textarea class="form-control" data-validation="length normaltext" data-validation-length="min50 max300" name="description" id="description" placeholder="Complaint Description" rows="4"></textarea>
               </div>
               <div class="form-group">
                 <input class="form-control" id="pac-input" placeholder="Location" name="location" type="text">
@@ -245,6 +252,17 @@
     ?>
     window.mapData = data;
     
+    </script>
+    <script> 
+        $.validate(); 
+        $.formUtils.addValidator({
+          name : 'normaltext',
+          validatorFunction : function(value, $el, config, language, $form) {
+            return /^[\-\/\\1-9a-z\s]+$/i.test(value);
+          },
+          errorMessage : 'You have to enter only alphabets, numbers, slashes, hyphens and spaces',
+          errorMessageKey: 'onlyLetters'
+        });
     </script>
   </body>
 </html>
