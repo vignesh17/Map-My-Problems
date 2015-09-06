@@ -119,11 +119,9 @@
           var loc = new gm.LatLng(datum.lat, datum.lon);
           bounds.extend(loc);
 
-          var comments = "<ul>";
+          var comments = "<ul>"
           for (var i in datum.comments) {
-            for (var j in datum.commenters) {
-              comments = comments + "<li>"+datum.comments[i]+"&nbsp;<strong>Posted By "+datum.commenters[j]+"</strong></li>";
-            };
+            comments = comments + "<li>"+datum.comments[i]+"&nbsp;<strong>Posted By "+datum.user+"</strong></li>";
           };
           comments += "</ul>";
           
