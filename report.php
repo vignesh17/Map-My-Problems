@@ -123,6 +123,7 @@
           for (var i in datum.comments) {
             for (var j in datum.commenters) {
               comments = comments + "<li>"+datum.comments[i]+"&nbsp;<strong>Posted By "+datum.commenters[j]+"</strong></li>";
+            };
           };
           comments += "</ul>";
           
