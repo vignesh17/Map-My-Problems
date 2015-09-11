@@ -14,7 +14,8 @@
 			$cursor = $collection -> find($idArray);
 			foreach ($cursor as $doc) {
 				$collection -> update($idArray, 
-					array('$push' => array("comments" => $comment, "commenters" => $username)
+					array('$push' => array("comments" => $comment, 
+						"commenters" => $username)
 					)
 				);
 			}

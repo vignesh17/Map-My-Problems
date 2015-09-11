@@ -120,7 +120,7 @@
           bounds.extend(loc);
 
           var comments = "";
-          if(datum.comments.length > 1) {
+          if(datum.comments.length > 0) {
             comments = "<ul>";
             for (var iterator = datum.comments.length - 1; iterator >= 0; iterator--) {
               comments = comments + "<li>"+datum.comments[iterator]+"&nbsp;<strong>Posted By "+datum.commenters[iterator]+"</strong></li>";
