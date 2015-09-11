@@ -123,7 +123,9 @@
           if(datum.comments.length > 0) {
             comments = "<ul>";
             for (var iterator = datum.comments.length - 1; iterator >= 0; iterator--) {
-              comments = comments + "<li>"+datum.comments[iterator]+"&nbsp;<strong>Posted By "+datum.commenters[iterator]+"</strong></li>";
+              if(1) {
+                comments = comments + "<li>"+datum.comments[iterator]+"&nbsp;<strong>Posted By "+datum.commenters[iterator]+"</strong></li>";
+              }
             }
             comments += "</ul>";
           }
@@ -252,8 +254,8 @@
             id: "'.$doc["_id"].'",
             user: "'.$_SESSION["username"].'",
             votes: '.$doc["votes"].',
-            comments: ['.'"'.implode('","',  $doc["comments"] ).'"'.'],
-            commenters: ['.'"'.implode('","',  $doc["commenters"] ).'"'.'],
+            comments: ' . json_encode($doc["comments"]) . ',
+            commenters: ' . json_encode($doc["comments"]) . '
           });
           ';
       }
