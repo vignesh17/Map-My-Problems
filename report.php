@@ -255,7 +255,7 @@
             user: "'.$_SESSION["username"].'",
             votes: '.$doc["votes"].',
             comments: ' . json_encode($doc["comments"]) . ',
-            commenters: ' . json_encode($doc["comments"]) . '
+            commenters: ' . json_encode($doc["commenters"]) . '
           });
           ';
       }
