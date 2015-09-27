@@ -248,7 +248,7 @@
           </form>
           <div id="insert-successful" class="text-center">
           </div>
-          <div class="complaints">
+          <div class="complaints" style="color:white">
             <?php
               $m = new MongoClient();
               $db = $m -> map;
@@ -262,7 +262,7 @@
               else {
                 $cursor = $collection -> find(array("username" => $_SESSION["username"]));
                 foreach ($cursor as $doc) {
-                  echo $doc["title"]."&nbsp;<a style='font-size: 14px' href='close.php?id=".$doc["_id"]."'>Close Complaint</a><br>";
+                  echo $doc["title"]."&nbsp;<a style='font-size: 14px;' href='close.php?id=".$doc["_id"]."'>Close Complaint</a><br>";
                 };
               }
               
