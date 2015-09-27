@@ -4,15 +4,14 @@
 
 	$liveServer = 0;
 	
-	if(!isset($_POST["name"]) or !isset($_POST["username"]) or !isset($_POST["password"]) or !isset($_POST["cpass"]) or !isset($_POST["email"])) {
+	if(!isset($_POST["title"]) or !isset($_POST["name"]) or !isset($_POST["password"]) or !isset($_POST["cpass"])) {
 		header('Location:signup.php');
 	}
 
 	$name = $_POST["name"];
-	$username = $_POST["username"];
+	$title = $_POST["title"];
 	$pass = $_POST["password"];
 	$cpass = $_POST["cpassword"];
-	$email = $_POST["email"];
 	$const = $_POST["constituency"];
 
 	if(strcmp($pass, $cpass) == 0) {
@@ -32,9 +31,9 @@
 
 	if($liveServer) {
 
-		$alreadyExists = (($collection -> count(array('username' => $username))) + ($collection -> count(array('email' => $email))));
-		if(!$alreadyExists) {
-			$user = array('name' => $name, 'username' => $username, 'pass' => $hashpass, 'email' => $email, 'active' => 0, 'verify' => crc32($email));
+		$alreadyExists = (($collection -> count(array('title' => $title))) + ($collection -> count(array('constituency' => $const))));
+		if($alreadyExists != 2) {
+			$user = array('name' => $name, 'title' => $title, 'constituency' => $const, 'pass' => $hashpass, 'admin' => 1);
 			$collection -> insert($user);
 		    $subject = 'Confirmation';
 			$message = 'Open this link to verify' . '<a href="map.com/verify.php?id='.crc32($email).'">map.com/verify.php?id='.crc32($email).'</a>';
@@ -68,9 +67,9 @@
 
 	else {
 
-		$alreadyExists = (($collection -> count(array('username' => $username))) + ($collection -> count(array('email' => $email))));
+		$alreadyExists = (($collection -> count(array('title' => $title, 'constituency' => $const))));
 		if(!$alreadyExists) {
-			$user = array('admin' => 0, 'name' => $name, 'username' => $username, 'pass' => $hashpass, 'email' => $email, 'active' => 1, 'verify' => crc32($email), "constituency" => $const);
+			$user = array('name' => "$name", 'title' => $title, 'constituency' => $const, 'pass' => $hashpass, 'admin' => 1);
 			$collection -> insert($user);
 			header('Location:login.php');
 		}

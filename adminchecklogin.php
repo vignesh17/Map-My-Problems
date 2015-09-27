@@ -3,19 +3,16 @@
 	session_start();
 	$username = $_POST['username'];
 	$password = md5($_POST['password']);
+	$const = $_POST["constituency"];
 	$m = new MongoClient();
 	$db = $m -> map;
 	$collection = $db -> users;
-	$constituency = "";
-	$cursor = $collection -> find(array('username' => $username));
-    foreach ($cursor as $doc) {
-        $constituency = $doc["constituency"];
-    }
-	$creds = array('username' => $username, 'pass' => $password, 'active' => 1);
+	$creds = array('title' => $username, 'pass' => $password, 'admin' => 1, 'constituency' => $const);
 	$count = $collection -> count($creds);
 	if ($count) {
 		$_SESSION['username'] = $username;
-		$_SESSION['constituency'] = $constituency;
+		$_SESSION['admin'] = 1;
+		$_SESSION['constituency'] = $const;
 		header('Location:report.php');
 	}
 	else {

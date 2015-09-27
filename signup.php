@@ -55,6 +55,13 @@
                                 <div class="form-group">
                                     <input class="form-control" data-validation="length alphanumeric" data-validation-length="min8" placeholder="Confirm Password" name="cpassword" type="password" value="">
                                 </div>
+                                <div class="form-group">
+                                    <select class="form-control" name="constituency">
+                                        <option value="Anna Nagar">Anna Nagar</option>
+                                        <option value="Thiruvanmiyur">Thiruvanmiyur</option>
+                                        <option value="Tambaram">Tambaram</option>
+                                    </select>
+                                </div>
                                 <input class="btn btn-lg btn-success btn-block" type="submit" value="Sign Up">
                                 <?php
                                 if ($_SESSION['password-mismatch']) {

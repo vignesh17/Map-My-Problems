@@ -136,7 +136,7 @@
             map: map,
             icon: iconWithColor(usualColor),
             shadow: shadow,
-            info: "<h4 class='report-title'>"+datum.title+"</h4><h6>Currently voted by "+datum.votes+" people<br><br><a href='vote.php?vote=up&id="+datum.id+'&user='+datum.user+"'>"+"Vote Up</a>"+"\n"+"&nbsp;&nbsp;&nbsp;<a href='vote.php?vote=down&id="+datum.id+'&user='+datum.user+"'>"+"Vote Down</a>"+"\n"+"<br><br><br><p class='report-desc'>"+datum.html+"</p><br><h5>Comments</h5>"+comments+"<br><form class='form-group' method='post' action='comment.php?id="+datum.id+'&user='+datum.user+"'><div><input class='form-control' type=text name='comment'></div><br><input class='btn btn-success btn-block' type='submit' value='Post Comment'>"
+            info: "<h4 class='report-title'>"+datum.title+"</h4><h5>Tagged at: "+datum.taggedAt+"</h5><br><h6>Currently voted by "+datum.votes+" people<br><br><a href='vote.php?vote=up&id="+datum.id+'&user='+datum.user+"'>"+"Vote Up</a>"+"\n"+"&nbsp;&nbsp;&nbsp;<a href='vote.php?vote=down&id="+datum.id+'&user='+datum.user+"'>"+"Vote Down</a>"+"\n"+"<br><br><br><p class='report-desc'>"+datum.html+"</p><br><h5>Comments</h5>"+comments+"<br><form class='form-group' method='post' action='comment.php?id="+datum.id+'&user='+datum.user+"'><div><input class='form-control' type=text name='comment'></div><br><input class='btn btn-success btn-block' type='submit' value='Post Comment'>"
           });
           marker.title = datum.title;
           oms.addMarker(marker);
@@ -154,8 +154,9 @@
             var title = $("#title").val();
             var description = $("#description").val();
             var location = $("#pac-input").val();
-            var dataString = {'title': title, 'description': description, 'location': location, 'coords': coords};
-            
+            var taggedAt = $("#taggedAt").val();
+            var dataString = {'title': title, 'description': description, 'location': location, 'coords': coords, 'taggedAt': taggedAt};
+            console.log(dataString);
             if(coords.length == 0) {
                   document.getElementById('insert-successful').innerHTML = 'Invalid Location';
             }
@@ -181,10 +182,13 @@
                     map: map,
                     icon: iconWithColor(usualColor),
                     shadow: shadow,
-                    info: "<h4 class='report-title'>"+title+"</h4>\n"+"<br><p class='report-desc'>"+description+"</p>"
+                    info: "<h4 class='report-title'>"+title+"</h4>\n"+"<h5>Tagged at: "+taggedAt+"</h5><br><p class='report-desc'>"+description+"</p>"
                   });
 
                   oms.addMarker(marker);  
+                  iw.setContent(marker.info);
+                  iw.setOptions({maxWidth: 500});
+                  iw.open(map, marker);
                   document.getElementById('insert-successful').innerHTML = 'Report created successfully.';
 
                 }
@@ -221,10 +225,48 @@
               <div class="form-group">
                 <input class="form-control" id="pac-input" placeholder="Location" name="location" type="text">
               </div>
+              <div class="form-group">
+                  <select class="form-control" name="taggedAt" id="taggedAt">
+                    <?php
+                      $m = new MongoClient();
+                      $db = $m -> map;
+                      $collection = $db -> users;
+                      $cursor = $collection -> find(array("username" => $_SESSION['username']));
+                      $current_const = "";
+                      foreach ($cursor as $doc) {
+                        $current_const = $doc["constituency"];
+                      }
+                      $cursor = $collection -> find(array("admin" => 1, "constituency" => $current_const));
+                      foreach ($cursor as $doc) {
+                        echo '<option value="'.$doc["title"].'">'.$doc["title"].'</option>';
+                      }
+                    ?>
+                  </select>
+                </div>
               <input class="btn btn-lg btn-success btn-block" id="submit-button" value="Submit">
             </fieldset>
           </form>
           <div id="insert-successful" class="text-center">
+          </div>
+          <div class="complaints">
+            <?php
+              $m = new MongoClient();
+              $db = $m -> map;
+              $collection = $db -> reports;
+              if($_SESSION['admin']) {
+                $cursor = $collection -> find(array("taggedAt" => $_SESSION["username"], "constituency" => $_SESSION['constituency']));
+                foreach ($cursor as $doc) {
+                  echo $doc["title"]."<br>";
+                }
+              }
+              else {
+                $cursor = $collection -> find(array("username" => $_SESSION["username"]));
+                foreach ($cursor as $doc) {
+                  echo $doc["title"]."&nbsp;<a style='font-size: 14px' href='close.php?id=".$doc["_id"]."'>Close Complaint</a><br>";
+                };
+              }
+              
+            ?>
           </div>
         </div>
         <div class="col-md-8 map-pane">
@@ -242,7 +284,13 @@
       $m = new MongoClient();
       $db = $m -> map;
       $collection = $db -> reports;
-      $cursor = $collection -> find();
+
+      if($_SESSION['admin']) {
+        $cursor = $collection -> find(array("constituency" => $_SESSION["constituency"], "taggedAt" => $_SESSION["username"]));
+      }
+      else {
+        $cursor = $collection -> find(); 
+      }
 
       foreach ($cursor as $doc) {
 
@@ -252,10 +300,12 @@
             title: "'.$doc["title"] .'",
             html: "'.$doc["description"] .'",
             id: "'.$doc["_id"].'",
+            username: "'.$doc["username"].'",
             user: "'.$_SESSION["username"].'",
             votes: '.$doc["votes"].',
             comments: ' . json_encode($doc["comments"]) . ',
-            commenters: ' . json_encode($doc["commenters"]) . '
+            commenters: ' . json_encode($doc["commenters"]) . ',
+            taggedAt: "' . $doc["taggedAt"] . '"
           });
           ';
       }
