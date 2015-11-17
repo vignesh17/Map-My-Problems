@@ -121,6 +121,7 @@
           var loc = new gm.LatLng(datum.lat, datum.lon);
           var markerColor = datum.markerColor;
           var markerId = datum.id;
+          var anim = datum.animation;
           bounds.extend(loc);
 
           var comments = "";
@@ -142,6 +143,7 @@
             markerColorTemp: markerColor,
             icon: iconWithColor(markerColor),
             shadow: shadow,
+            animation: anim,
             info: "<h4 class='report-title'>"+datum.title+"</h4><h5>Tagged at: "+datum.taggedAt+"</h5><br><h6>Currently voted by "+datum.votes+" people<br><br><a href='vote.php?vote=up&id="+datum.id+'&user='+datum.user+"'>"+"Vote Up</a>"+"\n"+"&nbsp;&nbsp;&nbsp;<a href='vote.php?vote=down&id="+datum.id+'&user='+datum.user+"'>"+"Vote Down</a>"+"\n"+"<br><br><br><p class='report-desc'>"+datum.html+"</p><br><h5>Comments</h5>"+comments+"<br><form class='form-group' method='post' action='comment.php?id="+datum.id+'&user='+datum.user+"'><div><input class='form-control' type=text name='comment'></div><br><input class='btn btn-success btn-block' type='submit' value='Post Comment'>"
           });
           marker.title = datum.title;
@@ -359,15 +361,18 @@
           $currentTime = new DateTime(date('Y-m-d H:i:s'));
           $creationTime = new DateTime(date('Y-m-d H:i:s', $doc["time"] -> sec ));
           $interval = $currentTime -> diff($creationTime);
-          $intervalInWeeks = intval(($interval -> format('%d')));
+          $intervalInDays = intval(($interval -> format('%d')));
           
-          if ($intervalInWeeks < 10) {
+          if ($intervalInDays < 10) {
             $markerColor = "F7D0C9";
+            $animation = 'google.maps.Animation.DROP';
           } else
-          if ($intervalInWeeks < 20) {
+          if ($intervalInDays < 20) {
             $markerColor = "FC8879";
+            $animation = 'google.maps.Animation.DROP';
           } else {
             $markerColor = "FF4241";
+            $animation = 'google.maps.Animation.BOUNCE';
           } 
 
           if ($doc["status"] == "open") {
@@ -384,6 +389,7 @@
                 commenters: ' . json_encode($doc["commenters"]) . ',
                 taggedAt: "' . $doc["taggedAt"] . '",
                 markerColor: "' . $markerColor . '",
+                animation: "'. $animation . '",
               });
             ';
           }
@@ -401,6 +407,7 @@
                 commenters: ' . json_encode($doc["commenters"]) . ',
                 taggedAt: "' . $doc["taggedAt"] . '",
                 markerColor: "' . 'FFEA9D' . '",
+                animation: "'. $animation . '",
               });
             ';
           }
@@ -412,15 +419,18 @@
             $currentTime = new DateTime(date('Y-m-d H:i:s'));
             $creationTime = new DateTime(date('Y-m-d H:i:s', $doc["time"] -> sec ));
             $interval = $currentTime -> diff($creationTime);
-            $intervalInWeeks = intval(($interval -> format('%d')));
+            $intervalInDays = intval(($interval -> format('%d')));
             
-            if ($intervalInWeeks < 10) {
+            if ($intervalInDays < 10) {
               $markerColor = "F7D0C9";
+              $animation = 'google.maps.Animation.DROP';
             } else
-            if ($intervalInWeeks < 20) {
+            if ($intervalInDays < 20) {
               $markerColor = "FC8879";
+              $animation = 'google.maps.Animation.DROP';
             } else {
               $markerColor = "FF4241";
+              $animation = 'google.maps.Animation.BOUNCE';
             } 
 
             echo 'data.push({
@@ -436,6 +446,7 @@
                 commenters: ' . json_encode($doc["commenters"]) . ',
                 taggedAt: "' . $doc["taggedAt"] . '",
                 markerColor: "' . $markerColor . '",
+                animation: '. $animation . ',
               });
             ';
           }
