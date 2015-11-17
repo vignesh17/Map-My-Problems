@@ -55,6 +55,13 @@
                                 </ul>
                             </div>
                             <?php
+                                if ($_SESSION['reset'] == 1) {
+                                    echo '
+                                        <div class="form-group text-center">
+                                            <label class="login-error">Password has been reset successfully.</label>
+                                        </div>
+                                    ';
+                                }
                                 if (isset($_SESSION['login-error'])) {
                                     if ($_SESSION['login-error'] == 1) {
                                         echo '
