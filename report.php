@@ -70,7 +70,7 @@
           {markersWontMove: true, markersWontHide: true});
 
         var usualColor = 'FF9933';
-        var spiderfiedColor = 'ffee22';
+        var spiderfiedColor = '0DB2B6';
         var iconWithColor = function(color) {
           return 'http://chart.googleapis.com/chart?chst=d_map_xpin_letter&chld=pin|+|' +
             color + '|000000|ffff00';
@@ -100,7 +100,7 @@
 
         oms.addListener('spiderfy', function(markers) {
           for(var i = 0; i < markers.length; i ++) {
-            markers[i].setIcon(iconWithColor(spiderfiedColor));
+            markers[i].setIcon(iconWithColor(markers[i].markerColorTemp));
             markers[i].setShadow(null);
           } 
           iw.close();
@@ -108,7 +108,7 @@
 
         oms.addListener('unspiderfy', function(markers) {
           for(var i = 0; i < markers.length; i ++) {
-            markers[i].setIcon(iconWithColor(usualColor));
+            markers[i].setIcon(iconWithColor(markers[i].markerColorTemp));
             markers[i].setShadow(shadow);
           }
         });
@@ -117,6 +117,7 @@
         for (var i = 0; i < window.mapData.length; i ++) {
           var datum = window.mapData[i];
           var loc = new gm.LatLng(datum.lat, datum.lon);
+          var markerColor = datum.markerColor;
           bounds.extend(loc);
 
           var comments = "";
@@ -134,7 +135,8 @@
           var marker = new gm.Marker({
             position: loc,
             map: map,
-            icon: iconWithColor(usualColor),
+            markerColorTemp: markerColor,
+            icon: iconWithColor(markerColor),
             shadow: shadow,
             info: "<h4 class='report-title'>"+datum.title+"</h4><h5>Tagged at: "+datum.taggedAt+"</h5><br><h6>Currently voted by "+datum.votes+" people<br><br><a href='vote.php?vote=up&id="+datum.id+'&user='+datum.user+"'>"+"Vote Up</a>"+"\n"+"&nbsp;&nbsp;&nbsp;<a href='vote.php?vote=down&id="+datum.id+'&user='+datum.user+"'>"+"Vote Down</a>"+"\n"+"<br><br><br><p class='report-desc'>"+datum.html+"</p><br><h5>Comments</h5>"+comments+"<br><form class='form-group' method='post' action='comment.php?id="+datum.id+'&user='+datum.user+"'><div><input class='form-control' type=text name='comment'></div><br><input class='btn btn-success btn-block' type='submit' value='Post Comment'>"
           });
@@ -156,7 +158,6 @@
             var location = $("#pac-input").val();
             var taggedAt = $("#taggedAt").val();
             var dataString = {'title': title, 'description': description, 'location': location, 'coords': coords, 'taggedAt': taggedAt};
-            console.log(dataString);
             if(coords.length == 0) {
                   document.getElementById('insert-successful').innerHTML = 'Invalid Location';
             }
@@ -180,7 +181,7 @@
                   var marker = new google.maps.Marker({
                     position: loc,
                     map: map,
-                    icon: iconWithColor(usualColor),
+                    icon: iconWithColor('008E09'),
                     shadow: shadow,
                     info: "<h4 class='report-title'>"+title+"</h4>\n"+"<h5>Tagged at: "+taggedAt+"</h5><br><p class='report-desc'>"+description+"</p>"
                   });
@@ -293,7 +294,18 @@
       }
 
       foreach ($cursor as $doc) {
-
+        $currentTime = new DateTime(date('Y-m-d H:i:s'));
+        $creationTime = new DateTime(date('Y-m-d H:i:s', $doc["time"] -> sec ));
+        $interval = $currentTime -> diff($creationTime);
+        $intervalInWeeks = intval(($interval -> format('%d')) / 7);
+        if ($intervalInWeeks < 1) {
+          $markerColor = "008E09";
+        } else
+        if ($intervalInWeeks < 2) {
+          $markerColor = "FFBF00";
+        } else {
+          $markerColor = "FF0303";
+        }
         echo 'data.push({
             lon:'.$doc["coords"][1].',
             lat: '.$doc["coords"][0].',
@@ -305,9 +317,10 @@
             votes: '.$doc["votes"].',
             comments: ' . json_encode($doc["comments"]) . ',
             commenters: ' . json_encode($doc["commenters"]) . ',
-            taggedAt: "' . $doc["taggedAt"] . '"
+            taggedAt: "' . $doc["taggedAt"] . '",
+            markerColor: "' . $markerColor . '",
           });
-          ';
+        ';
       }
     ?>
     window.mapData = data;
