@@ -22,6 +22,7 @@
 			'time' => new MongoDate(),
 			'taggedAt' => $taggedAt,
 			'constituency' => $constituency,
+			'status' => "open",
 		);
 		$collection -> insert($report);
 		header('Location:report.php');

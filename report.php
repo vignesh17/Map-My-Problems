@@ -18,6 +18,8 @@
     <script src="http://maps.google.com/maps/api/js?v=3.9&amp;libraries=places&amp;sensor=false"></script>
     <script type="text/javascript" src="js/spider.js"></script>
     <script>
+
+
       var coords = [];
 
       window.onload = function() {
@@ -118,6 +120,7 @@
           var datum = window.mapData[i];
           var loc = new gm.LatLng(datum.lat, datum.lon);
           var markerColor = datum.markerColor;
+          var markerId = datum.id;
           bounds.extend(loc);
 
           var comments = "";
@@ -135,6 +138,7 @@
           var marker = new gm.Marker({
             position: loc,
             map: map,
+            id: markerId,
             markerColorTemp: markerColor,
             icon: iconWithColor(markerColor),
             shadow: shadow,
@@ -145,6 +149,7 @@
           comments = "";
         }
         map.fitBounds(bounds);
+
 
         window.map = map;
         window.oms = oms;
@@ -200,6 +205,23 @@
         });
 
       }
+
+      function closeComplaint(complaintId) {
+          $.ajax({
+
+                type: "GET",
+                url: "close.php?id=" + complaintId,
+                cache: true,
+                success: function (html) {
+                  $("p#"+complaintId).remove();
+                  var availMarkers = oms.getMarkers();
+                  var toBeDeleted = $.grep(availMarkers, function(e){ return e.id == complaintId; })[0];
+                  toBeDeleted.setMap(null);
+                  window.alert("Your complaint has been closed successfully");
+                }
+              });
+        }
+
     </script>
   </head> 
   <body class="main-page">
@@ -263,7 +285,10 @@
               else {
                 $cursor = $collection -> find(array("username" => $_SESSION["username"]));
                 foreach ($cursor as $doc) {
-                  echo $doc["title"]."&nbsp;<a style='font-size: 14px;' href='close.php?id=".$doc["_id"]."'>Close Complaint</a><br>";
+                  if($doc["status"] == "open") {
+                    echo "<p id='" .  $doc["_id"] . "'>" . $doc["title"] . "&nbsp;<a style='font-size: 14px;' href='#' onClick=closeComplaint('" . $doc["_id"] . "')" . ">Close Complaint</a><br></p>\n";
+                    //echo $doc["title"]."&nbsp;<a style='font-size: 14px;' href='close.php?id=" . $doc["_id"]  . "'>Close Complaint</a><br>";
+                  } 
                 };
               }
               
@@ -294,38 +319,41 @@
       }
 
       foreach ($cursor as $doc) {
-        $currentTime = new DateTime(date('Y-m-d H:i:s'));
-        $creationTime = new DateTime(date('Y-m-d H:i:s', $doc["time"] -> sec ));
-        $interval = $currentTime -> diff($creationTime);
-        $intervalInWeeks = intval(($interval -> format('%d')) / 7);
-        if ($intervalInWeeks < 1) {
-          $markerColor = "008E09";
-        } else
-        if ($intervalInWeeks < 2) {
-          $markerColor = "FFBF00";
-        } else {
-          $markerColor = "FF0303";
+        if ($doc["status"] == "open") {
+          $currentTime = new DateTime(date('Y-m-d H:i:s'));
+          $creationTime = new DateTime(date('Y-m-d H:i:s', $doc["time"] -> sec ));
+          $interval = $currentTime -> diff($creationTime);
+          $intervalInWeeks = intval(($interval -> format('%d')) / 7);
+          if ($intervalInWeeks < 1) {
+            $markerColor = "008E09";
+          } else
+          if ($intervalInWeeks < 2) {
+            $markerColor = "FFBF00";
+          } else {
+            $markerColor = "FF0303";
+          }
+          echo 'data.push({
+              lon:'.$doc["coords"][1].',
+              lat: '.$doc["coords"][0].',
+              title: "'.$doc["title"] .'",
+              html: "'.$doc["description"] .'",
+              id: "'.$doc["_id"].'",
+              username: "'.$doc["username"].'",
+              user: "'.$_SESSION["username"].'",
+              votes: '.$doc["votes"].',
+              comments: ' . json_encode($doc["comments"]) . ',
+              commenters: ' . json_encode($doc["commenters"]) . ',
+              taggedAt: "' . $doc["taggedAt"] . '",
+              markerColor: "' . $markerColor . '",
+            });
+          ';
         }
-        echo 'data.push({
-            lon:'.$doc["coords"][1].',
-            lat: '.$doc["coords"][0].',
-            title: "'.$doc["title"] .'",
-            html: "'.$doc["description"] .'",
-            id: "'.$doc["_id"].'",
-            username: "'.$doc["username"].'",
-            user: "'.$_SESSION["username"].'",
-            votes: '.$doc["votes"].',
-            comments: ' . json_encode($doc["comments"]) . ',
-            commenters: ' . json_encode($doc["commenters"]) . ',
-            taggedAt: "' . $doc["taggedAt"] . '",
-            markerColor: "' . $markerColor . '",
-          });
-        ';
       }
     ?>
     window.mapData = data;
     
     </script>
+
     <script> 
         $.validate(); 
         $.formUtils.addValidator({
@@ -337,5 +365,6 @@
           errorMessageKey: 'onlyLetters'
         });
     </script>
+
   </body>
 </html>
