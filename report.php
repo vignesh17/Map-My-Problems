@@ -350,15 +350,21 @@
           $currentTime = new DateTime(date('Y-m-d H:i:s'));
           $creationTime = new DateTime(date('Y-m-d H:i:s', $doc["time"] -> sec ));
           $interval = $currentTime -> diff($creationTime);
-          $intervalInWeeks = intval(($interval -> format('%d')) / 7);
-          if ($intervalInWeeks < 1) {
-            $markerColor = "008E09";
+          $intervalInWeeks = intval(($interval -> format('%d')));
+          if ($intervalInWeeks < 3) {
+            $markerColor = "F7D0C9";
           } else
-          if ($intervalInWeeks < 2) {
-            $markerColor = "FFBF00";
+          if ($intervalInWeeks < 7) {
+            $markerColor = "F6A293";
+          } else 
+          if ($intervalInWeeks < 10) {
+            $markerColor = "FC8879";
+          } else 
+          if ($intervalInWeeks < 14) {
+            $markerColor = "FF6A6B";
           } else {
-            $markerColor = "FF0303";
-          }
+            $markerColor = "FF4241";
+          } 
           echo 'data.push({
               lon:'.$doc["coords"][1].',
               lat: '.$doc["coords"][0].',
