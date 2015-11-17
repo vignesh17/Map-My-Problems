@@ -213,7 +213,7 @@
                   var marker = new google.maps.Marker({
                     position: loc,
                     map: map,
-                    icon: iconWithColor('008E09'),
+                    icon: iconWithColor('F7D0C9'),
                     shadow: shadow,
                     info: "<h4 class='report-title'>"+title+"</h4>\n"+"<h5>Tagged at: "+taggedAt+"</h5><br><p class='report-desc'>"+description+"</p>"
                   });
@@ -256,6 +256,14 @@
     <nav class="navbar navbar-default row">
       <div class="container">
         <div class="navbar-header pull-right">
+          <?php
+            if (isset($_GET["closed"])) {
+              echo '<a class="navbar-brand" href="report.php">Hide Closed Complaints</a>';
+            }
+            else {
+              echo '<a class="navbar-brand" href="report.php?closed=true">Show Closed Complaints</a>';
+            }
+          ?>
           <a class="navbar-brand" href="logout.php">Logout</a>
         </div>
       </div>
@@ -346,41 +354,94 @@
       }
 
       foreach ($cursor as $doc) {
-        if ($doc["status"] == "open") {
+
+        if (isset($_GET["closed"])) {
           $currentTime = new DateTime(date('Y-m-d H:i:s'));
           $creationTime = new DateTime(date('Y-m-d H:i:s', $doc["time"] -> sec ));
           $interval = $currentTime -> diff($creationTime);
           $intervalInWeeks = intval(($interval -> format('%d')));
-          if ($intervalInWeeks < 3) {
+          
+          if ($intervalInWeeks < 10) {
             $markerColor = "F7D0C9";
           } else
-          if ($intervalInWeeks < 7) {
-            $markerColor = "F6A293";
-          } else 
-          if ($intervalInWeeks < 10) {
+          if ($intervalInWeeks < 20) {
             $markerColor = "FC8879";
-          } else 
-          if ($intervalInWeeks < 14) {
-            $markerColor = "FF6A6B";
           } else {
             $markerColor = "FF4241";
           } 
-          echo 'data.push({
-              lon:'.$doc["coords"][1].',
-              lat: '.$doc["coords"][0].',
-              title: "'.$doc["title"] .'",
-              html: "'.$doc["description"] .'",
-              id: "'.$doc["_id"].'",
-              username: "'.$doc["username"].'",
-              user: "'.$_SESSION["username"].'",
-              votes: '.$doc["votes"].',
-              comments: ' . json_encode($doc["comments"]) . ',
-              commenters: ' . json_encode($doc["commenters"]) . ',
-              taggedAt: "' . $doc["taggedAt"] . '",
-              markerColor: "' . $markerColor . '",
-            });
-          ';
+
+          if ($doc["status"] == "open") {
+            echo 'data.push({
+                lon:'.$doc["coords"][1].',
+                lat: '.$doc["coords"][0].',
+                title: "'.$doc["title"] .'",
+                html: "'.$doc["description"] .'",
+                id: "'.$doc["_id"].'",
+                username: "'.$doc["username"].'",
+                user: "'.$_SESSION["username"].'",
+                votes: '.$doc["votes"].',
+                comments: ' . json_encode($doc["comments"]) . ',
+                commenters: ' . json_encode($doc["commenters"]) . ',
+                taggedAt: "' . $doc["taggedAt"] . '",
+                markerColor: "' . $markerColor . '",
+              });
+            ';
+          }
+          else {
+            echo 'data.push({
+                lon:'.$doc["coords"][1].',
+                lat: '.$doc["coords"][0].',
+                title: "'.$doc["title"] .'",
+                html: "'.$doc["description"] .'",
+                id: "'.$doc["_id"].'",
+                username: "'.$doc["username"].'",
+                user: "'.$_SESSION["username"].'",
+                votes: '.$doc["votes"].',
+                comments: ' . json_encode($doc["comments"]) . ',
+                commenters: ' . json_encode($doc["commenters"]) . ',
+                taggedAt: "' . $doc["taggedAt"] . '",
+                markerColor: "' . 'FFEA9D' . '",
+              });
+            ';
+          }
         }
+
+        else {
+
+          if ($doc["status"] == "open") {
+            $currentTime = new DateTime(date('Y-m-d H:i:s'));
+            $creationTime = new DateTime(date('Y-m-d H:i:s', $doc["time"] -> sec ));
+            $interval = $currentTime -> diff($creationTime);
+            $intervalInWeeks = intval(($interval -> format('%d')));
+            
+            if ($intervalInWeeks < 10) {
+              $markerColor = "F7D0C9";
+            } else
+            if ($intervalInWeeks < 20) {
+              $markerColor = "FC8879";
+            } else {
+              $markerColor = "FF4241";
+            } 
+
+            echo 'data.push({
+                lon:'.$doc["coords"][1].',
+                lat: '.$doc["coords"][0].',
+                title: "'.$doc["title"] .'",
+                html: "'.$doc["description"] .'",
+                id: "'.$doc["_id"].'",
+                username: "'.$doc["username"].'",
+                user: "'.$_SESSION["username"].'",
+                votes: '.$doc["votes"].',
+                comments: ' . json_encode($doc["comments"]) . ',
+                commenters: ' . json_encode($doc["commenters"]) . ',
+                taggedAt: "' . $doc["taggedAt"] . '",
+                markerColor: "' . $markerColor . '",
+              });
+            ';
+          }
+        
+        }
+        
       }
     ?>
     window.mapData = data;
