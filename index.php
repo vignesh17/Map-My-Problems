@@ -13,6 +13,7 @@
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <script src='https://www.google.com/recaptcha/api.js'></script>
     <script type="text/javascript">
         window.alert = function(){};
         var defaultCSS = document.getElementById('bootstrap-css');
@@ -53,15 +54,25 @@
                                 </ul>
                             </div>
                             <?php
-                                if ($_SESSION['login-error']) {
-                                    echo '
-                                        <div class="form-group text-center">
-                                            <label class="login-error">Invalid credentials. Try again.</label>
-                                        </div>
-                                    ';
+                                if (isset($_SESSION['login-error'])) {
+                                    if ($_SESSION['login-error'] == 1) {
+                                        echo '
+                                            <div class="form-group text-center">
+                                                <label class="login-error">Invalid credentials. Try again.</label>
+                                            </div>
+                                        ';
+                                    }
+                                    else {
+                                        echo '
+                                            <div class="form-group text-center">
+                                                <label class="login-error">Please prove that you are human.</label>
+                                            </div>
+                                        ';
+                                    }
                                 }
                                 session_destroy();
                             ?>
+                            <div style="text-align: -webkit-center;margin-bottom: 10px;" class="g-recaptcha" data-theme="dark" data-sitekey="6LcbKhETAAAAAG0qN3ebzmdKFqTMCDJI8gv4GWyo"></div>
                             <input class="btn btn-lg btn-success btn-block" type="submit" value="Login">
                         </fieldset>
                         </form>
