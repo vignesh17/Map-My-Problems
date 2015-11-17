@@ -154,6 +154,33 @@
         window.map = map;
         window.oms = oms;
 
+        <?php
+          if (isset($_SESSION["voteError"])) {
+            if ($_SESSION["voteError"] == 1) {
+              echo "window.alert('You have already upvoted this.');";
+            }
+            else if ($_SESSION["voteError"] == -1) {
+              echo "window.alert('You have already downvoted this.');";
+            }            
+          }
+          if (isset($_SESSION["votedId"])) {
+            echo 'var availMarkers = oms.getMarkers();';
+            echo 'var toBeOpened = $.grep(availMarkers, function(e){ return e.id == "' . $_SESSION["votedId"] . '"; })[0];';
+            echo 'console.log(toBeOpened);';
+            echo 'iw.setContent(toBeOpened.info);';
+            echo 'iw.setOptions({maxWidth: 500});';
+            echo 'iw.open(map, toBeOpened);';
+          }
+          if (isset($_SESSION["votedId"])) {
+            echo 'var availMarkers = oms.getMarkers();';
+            echo 'var toBeOpened = $.grep(availMarkers, function(e){ return e.id == "' . $_SESSION["votedId"] . '"; })[0];';
+            echo 'console.log(toBeOpened);';
+            echo 'iw.setContent(toBeOpened.info);';
+            echo 'iw.setOptions({maxWidth: 500});';
+            echo 'iw.open(map, toBeOpened);';
+          }
+        ?>
+
         $(function() {
 
           $("#submit-button").click(function() {
