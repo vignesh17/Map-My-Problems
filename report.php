@@ -90,8 +90,8 @@
         autocomplete.addListener('place_changed', function() {
           var place = autocomplete.getPlace();
           coords = [];
-          coords.push(place.geometry.location['A']);
-          coords.push(place.geometry.location['F']);
+          coords.push(place.geometry.location.lat());
+          coords.push(place.geometry.location.lng());
         })
 
         oms.addListener('click', function(marker) {
@@ -228,11 +228,9 @@
 
                 },
                 'error': function(jqXHR, textStatus, errorThrown) {
-                  //alert('ERROR: ' + textStatus);
-                  <?php 
-                    $_SESSION['spam'] = 1;
-                    header('Location:login.php');
-                  ?>
+                  sessionStorage.spam = '1';
+                  window.location = 'login.php';
+                  alert('Spam detected. You will be logged out.');
                 }
               });
             }
