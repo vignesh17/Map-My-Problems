@@ -96,13 +96,24 @@
 				//OMS Spiderfy markers
 				oms.addListener('spiderfy', function(markers) {
 					for(var i = 0; i < markers.length; i ++) {
-						markers[i].setIcon({
-							path: google.maps.SymbolPath.CIRCLE,
-							strokeColor: markers[i].markerColorTemp,
-							scale: 6,
-							strokeWeight: 12,
-							strokeOpacity: 1
-						});
+						if (markers[i].iconBig == true) {
+							markers[i].setIcon({
+								path: google.maps.SymbolPath.CIRCLE,
+								strokeColor: markers[i].markerColorTemp,
+								scale: 8,
+								strokeWeight: 16,
+								strokeOpacity: 0.9
+							});
+						}
+						else {
+							markers[i].setIcon({
+								path: google.maps.SymbolPath.CIRCLE,
+								strokeColor: markers[i].markerColorTemp,
+								scale: 4,
+								strokeWeight: 8,
+								strokeOpacity: 0.9
+							});
+						}
 					} 
 					iw.close();
 				});
@@ -143,23 +154,46 @@
 						comments += "</ul>";
 					}
 					
+					var voteCutOff = 100;
+					if (datum.votes < voteCutOff) {
+						var marker = new gm.Marker({
+							position: loc,
+							map: map,
+							id: markerId,
+							markerColorTemp: markerColor,
+							iconBig: false,
+							//icon: iconWithColor(markerColor),
+							icon: {
+								path: google.maps.SymbolPath.CIRCLE,
+								strokeColor: markerColor,
+								scale: 4,
+								strokeWeight: 8,
+								strokeOpacity: 0.9,
+							},
+							animation: anim,
+							info: "<h4 class='report-title'>"+datum.title+"</h4><h5>Tagged at: "+datum.taggedAt+"</h5><br><h6>Currently voted by "+datum.votes+" people<br><br><a href='vote.php?vote=up&id="+datum.id+'&user='+datum.user+"'>"+"Vote Up</a>"+"\n"+"&nbsp;&nbsp;&nbsp;<a href='vote.php?vote=down&id="+datum.id+'&user='+datum.user+"'>"+"Vote Down</a>"+"\n"+"<br><br><br><p class='report-desc'>"+datum.html+"</p><br><h5>Comments</h5>"+comments+"<br><form class='form-group' method='post' action='comment.php?id="+datum.id+'&user='+datum.user+"'><div><input class='form-control' type=text name='comment'></div><br><input class='btn btn-success btn-block' type='submit' value='Post Comment'>"
+						});
+					}
+					else {
+						var marker = new gm.Marker({
+							position: loc,
+							map: map,
+							id: markerId,
+							markerColorTemp: markerColor,
+							iconBig: true,
+							//icon: iconWithColor(markerColor),
+							icon: {
+								path: google.maps.SymbolPath.CIRCLE,
+								strokeColor: markerColor,
+								scale: 8,
+								strokeWeight: 16,
+								strokeOpacity: 0.9,
+							},
+							animation: anim,
+							info: "<h4 class='report-title'>"+datum.title+"</h4><h5>Tagged at: "+datum.taggedAt+"</h5><br><h6>Currently voted by "+datum.votes+" people<br><br><a href='vote.php?vote=up&id="+datum.id+'&user='+datum.user+"'>"+"Vote Up</a>"+"\n"+"&nbsp;&nbsp;&nbsp;<a href='vote.php?vote=down&id="+datum.id+'&user='+datum.user+"'>"+"Vote Down</a>"+"\n"+"<br><br><br><p class='report-desc'>"+datum.html+"</p><br><h5>Comments</h5>"+comments+"<br><form class='form-group' method='post' action='comment.php?id="+datum.id+'&user='+datum.user+"'><div><input class='form-control' type=text name='comment'></div><br><input class='btn btn-success btn-block' type='submit' value='Post Comment'>"
+						});
+					}
 
-					var marker = new gm.Marker({
-						position: loc,
-						map: map,
-						id: markerId,
-						markerColorTemp: markerColor,
-						//icon: iconWithColor(markerColor),
-						icon: {
-							path: google.maps.SymbolPath.CIRCLE,
-							strokeColor: markerColor,
-							scale: 4,
-							strokeWeight: 8,
-							strokeOpacity: 0.9,
-						},
-						animation: anim,
-						info: "<h4 class='report-title'>"+datum.title+"</h4><h5>Tagged at: "+datum.taggedAt+"</h5><br><h6>Currently voted by "+datum.votes+" people<br><br><a href='vote.php?vote=up&id="+datum.id+'&user='+datum.user+"'>"+"Vote Up</a>"+"\n"+"&nbsp;&nbsp;&nbsp;<a href='vote.php?vote=down&id="+datum.id+'&user='+datum.user+"'>"+"Vote Down</a>"+"\n"+"<br><br><br><p class='report-desc'>"+datum.html+"</p><br><h5>Comments</h5>"+comments+"<br><form class='form-group' method='post' action='comment.php?id="+datum.id+'&user='+datum.user+"'><div><input class='form-control' type=text name='comment'></div><br><input class='btn btn-success btn-block' type='submit' value='Post Comment'>"
-					});
 					marker.title = datum.title;
 					oms.addMarker(marker);
 					globalMarkers.push(marker);
