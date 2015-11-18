@@ -12,6 +12,25 @@
 		$filter = new SpamFilter();
 		$result = $filter->check_text($comment);
 		if ($result) {
+			$m = new MongoClient();
+			$db = $m -> map;
+			$collection = $db -> spammers;
+			$isSpammer = $collection -> count(array('username' => $username));
+			if (!$isSpammer) {
+				$collection -> insert(array('username' => $username, 'count' => 1));
+			}
+			else {
+				$isSpammer = $collection -> find(array('username' => $username));
+				foreach ($isSpammer as $c) {
+					if($c["count"] < 3) {
+						$collection -> update(array('username' => $username), array('$inc' => array("count" => 1)));
+					}
+					else {
+						$collection = $db -> users;
+						$collection -> remove(array('username' => $username));
+					}
+				}
+			}
 			$_SESSION['spam'] = 1;
 			header('Location:login.php');
 		}
