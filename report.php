@@ -128,12 +128,11 @@
 							strokeWeight: 8,
 							strokeOpacity: 0.9
 						});
+						markers[i].setAnimation(markers[i].getAnimation());
 					}
 				});
 				
 				var bounds = new gm.LatLngBounds();
-				
-
 
 				for (var i = 0; i < window.mapData.length; i ++) {
 					var datum = window.mapData[i];
@@ -452,7 +451,7 @@
 								commenters: ' . json_encode($doc["commenters"]) . ',
 								taggedAt: "' . $doc["taggedAt"] . '",
 								markerColor: "' . $markerColor . '",
-								animation: '. $animation . ',
+								animation: '. 'google.maps.Animation.DROP' . ',
 							});
 						';
 					}
