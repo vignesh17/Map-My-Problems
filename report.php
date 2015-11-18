@@ -451,7 +451,7 @@
 								commenters: ' . json_encode($doc["commenters"]) . ',
 								taggedAt: "' . $doc["taggedAt"] . '",
 								markerColor: "' . $markerColor . '",
-								animation: '. 'google.maps.Animation.DROP' . ',
+								animation: '. $animation . ',
 							});
 						';
 					}
@@ -469,7 +469,7 @@
 								commenters: ' . json_encode($doc["commenters"]) . ',
 								taggedAt: "' . $doc["taggedAt"] . '",
 								markerColor: "' . '#FFEA9D' . '",
-								animation: '. $animation . ',
+								animation: '. 'google.maps.Animation.DROP' . ',
 							});
 						';
 						echo 'console.log(data);';
