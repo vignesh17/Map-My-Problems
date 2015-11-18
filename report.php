@@ -99,7 +99,7 @@
               strokeColor: markers[i].markerColorTemp,
               scale: 6,
               strokeWeight: 12,
-              strokeOpacity: 0.8
+              strokeOpacity: 1
             });
           } 
           iw.close();
@@ -111,9 +111,9 @@
             markers[i].setIcon({
               path: google.maps.SymbolPath.CIRCLE,
               strokeColor: markers[i].markerColorTemp,
-              scale: 6,
-              strokeWeight: 12,
-              strokeOpacity: 0.8
+              scale: 4,
+              strokeWeight: 8,
+              strokeOpacity: 0.9
             });
           }
         });
@@ -150,9 +150,9 @@
             icon: {
               path: google.maps.SymbolPath.CIRCLE,
               strokeColor: markerColor,
-              scale: 6,
-              strokeWeight: 12,
-              strokeOpacity: 0.8
+              scale: 4,
+              strokeWeight: 8,
+              strokeOpacity: 0.9,
             },
             animation: anim,
             info: "<h4 class='report-title'>"+datum.title+"</h4><h5>Tagged at: "+datum.taggedAt+"</h5><br><h6>Currently voted by "+datum.votes+" people<br><br><a href='vote.php?vote=up&id="+datum.id+'&user='+datum.user+"'>"+"Vote Up</a>"+"\n"+"&nbsp;&nbsp;&nbsp;<a href='vote.php?vote=down&id="+datum.id+'&user='+datum.user+"'>"+"Vote Down</a>"+"\n"+"<br><br><br><p class='report-desc'>"+datum.html+"</p><br><h5>Comments</h5>"+comments+"<br><form class='form-group' method='post' action='comment.php?id="+datum.id+'&user='+datum.user+"'><div><input class='form-control' type=text name='comment'></div><br><input class='btn btn-success btn-block' type='submit' value='Post Comment'>"
@@ -229,9 +229,9 @@
                     icon: {
                       path: google.maps.SymbolPath.CIRCLE,
                       strokeColor: '#F7D0C9',
-                      scale: 6,
-                      strokeWeight: 12,
-                      strokeOpacity: 0.8
+                      scale: 4,
+                      strokeWeight: 8,
+                      strokeOpacity: 0.9
                     },
                     animation: 'google.maps.Animation.DROP',
                     info: "<h4 class='report-title'>"+title+"</h4>\n"+"<h5>Tagged at: "+taggedAt+"</h5><br><p class='report-desc'>"+description+"</p>"
