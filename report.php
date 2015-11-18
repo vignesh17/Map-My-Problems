@@ -24,8 +24,10 @@
 
       window.onload = function() {
 
+        //Autocomplete field
         var input = document.getElementById('pac-input');
         
+        //Map Styles
         var gm = google.maps;
         var chennai = {lat: 13.0846, lng: 80.2179};
         var map = new gm.Map(document.getElementById('map'), {
@@ -67,24 +69,12 @@
           ]
         });
         
+        //Initialise infowindows and OMS
         var iw = new gm.InfoWindow();
         var oms = new OverlappingMarkerSpiderfier(map,
           {markersWontMove: true, markersWontHide: true});
 
-        var usualColor = 'FF9933';
-        var spiderfiedColor = '0DB2B6';
-        var iconWithColor = function(color) {
-          return 'http://chart.googleapis.com/chart?chst=d_map_xpin_letter&chld=pin|+|' +
-            color + '|000000|ffff00';
-        }
-        
-        var shadow = new gm.MarkerImage(
-          'https://www.google.com/intl/en_ALL/mapfiles/shadow50.png',
-          new gm.Size(37, 34),  // size   - for sprite clipping
-          new gm.Point(0, 0),   // origin - ditto
-          new gm.Point(10, 34)  // anchor - where to meet map location
-        );
-
+        //Convert location to coordinates
         var autocomplete = new google.maps.places.Autocomplete(input);
         autocomplete.bindTo('bounds', map);
         autocomplete.addListener('place_changed', function() {
@@ -94,28 +84,43 @@
           coords.push(place.geometry.location.lng());
         })
 
+        //OMS Open infowindow on click
         oms.addListener('click', function(marker) {
           iw.setContent(marker.info);
           iw.setOptions({maxWidth: 500});
           iw.open(map, marker);
         });
 
+        //OMS Spiderfy markers
         oms.addListener('spiderfy', function(markers) {
           for(var i = 0; i < markers.length; i ++) {
-            markers[i].setIcon(iconWithColor(markers[i].markerColorTemp));
-            markers[i].setShadow(null);
+            markers[i].setIcon({
+              path: google.maps.SymbolPath.CIRCLE,
+              strokeColor: markers[i].markerColorTemp,
+              scale: 6,
+              strokeWeight: 12,
+              strokeOpacity: 0.8
+            });
           } 
           iw.close();
         });
 
+        //OMS Unspiderfy markers
         oms.addListener('unspiderfy', function(markers) {
           for(var i = 0; i < markers.length; i ++) {
-            markers[i].setIcon(iconWithColor(markers[i].markerColorTemp));
-            markers[i].setShadow(shadow);
+            markers[i].setIcon({
+              path: google.maps.SymbolPath.CIRCLE,
+              strokeColor: markers[i].markerColorTemp,
+              scale: 6,
+              strokeWeight: 12,
+              strokeOpacity: 0.8
+            });
           }
         });
         
         var bounds = new gm.LatLngBounds();
+
+
         for (var i = 0; i < window.mapData.length; i ++) {
           var datum = window.mapData[i];
           var loc = new gm.LatLng(datum.lat, datum.lon);
@@ -141,8 +146,14 @@
             map: map,
             id: markerId,
             markerColorTemp: markerColor,
-            icon: iconWithColor(markerColor),
-            shadow: shadow,
+            //icon: iconWithColor(markerColor),
+            icon: {
+              path: google.maps.SymbolPath.CIRCLE,
+              strokeColor: markerColor,
+              scale: 6,
+              strokeWeight: 12,
+              strokeOpacity: 0.8
+            },
             animation: anim,
             info: "<h4 class='report-title'>"+datum.title+"</h4><h5>Tagged at: "+datum.taggedAt+"</h5><br><h6>Currently voted by "+datum.votes+" people<br><br><a href='vote.php?vote=up&id="+datum.id+'&user='+datum.user+"'>"+"Vote Up</a>"+"\n"+"&nbsp;&nbsp;&nbsp;<a href='vote.php?vote=down&id="+datum.id+'&user='+datum.user+"'>"+"Vote Down</a>"+"\n"+"<br><br><br><p class='report-desc'>"+datum.html+"</p><br><h5>Comments</h5>"+comments+"<br><form class='form-group' method='post' action='comment.php?id="+datum.id+'&user='+datum.user+"'><div><input class='form-control' type=text name='comment'></div><br><input class='btn btn-success btn-block' type='submit' value='Post Comment'>"
           });
@@ -215,8 +226,14 @@
                   var marker = new google.maps.Marker({
                     position: loc,
                     map: map,
-                    icon: iconWithColor('F7D0C9'),
-                    shadow: shadow,
+                    icon: {
+                      path: google.maps.SymbolPath.CIRCLE,
+                      strokeColor: '#F7D0C9',
+                      scale: 6,
+                      strokeWeight: 12,
+                      strokeOpacity: 0.8
+                    },
+                    animation: 'google.maps.Animation.DROP',
                     info: "<h4 class='report-title'>"+title+"</h4>\n"+"<h5>Tagged at: "+taggedAt+"</h5><br><p class='report-desc'>"+description+"</p>"
                   });
 
@@ -240,6 +257,7 @@
 
       }
 
+      //Close Complaint
       function closeComplaint(complaintId) {
           $.ajax({
 
@@ -369,14 +387,14 @@
           $intervalInDays = intval(($interval -> format('%d')));
           
           if ($intervalInDays < 10) {
-            $markerColor = "F7D0C9";
+            $markerColor = "#F7D0C9";
             $animation = 'google.maps.Animation.DROP';
           } else
           if ($intervalInDays < 20) {
-            $markerColor = "FC8879";
+            $markerColor = "#FC8879";
             $animation = 'google.maps.Animation.DROP';
           } else {
-            $markerColor = "FF4241";
+            $markerColor = "#FF4241";
             $animation = 'google.maps.Animation.BOUNCE';
           } 
 
@@ -394,7 +412,7 @@
                 commenters: ' . json_encode($doc["commenters"]) . ',
                 taggedAt: "' . $doc["taggedAt"] . '",
                 markerColor: "' . $markerColor . '",
-                animation: "'. $animation . '",
+                animation: '. $animation . ',
               });
             ';
           }
@@ -411,10 +429,11 @@
                 comments: ' . json_encode($doc["comments"]) . ',
                 commenters: ' . json_encode($doc["commenters"]) . ',
                 taggedAt: "' . $doc["taggedAt"] . '",
-                markerColor: "' . 'FFEA9D' . '",
-                animation: "'. $animation . '",
+                markerColor: "' . '#FFEA9D' . '",
+                animation: '. $animation . ',
               });
             ';
+            echo 'console.log(data);';
           }
         }
 
@@ -427,14 +446,14 @@
             $intervalInDays = intval(($interval -> format('%d')));
             
             if ($intervalInDays < 10) {
-              $markerColor = "F7D0C9";
+              $markerColor = "#F7D0C9";
               $animation = 'google.maps.Animation.DROP';
             } else
             if ($intervalInDays < 20) {
-              $markerColor = "FC8879";
+              $markerColor = "#FC8879";
               $animation = 'google.maps.Animation.DROP';
             } else {
-              $markerColor = "FF4241";
+              $markerColor = "#FF4241";
               $animation = 'google.maps.Animation.BOUNCE';
             } 
 
