@@ -226,6 +226,13 @@
                   iw.open(map, marker);
                   document.getElementById('insert-successful').innerHTML = 'Report created successfully.';
 
+                },
+                'error': function(jqXHR, textStatus, errorThrown) {
+                  //alert('ERROR: ' + textStatus);
+                  <?php 
+                    $_SESSION['spam'] = 1;
+                    header('Location:login.php');
+                  ?>
                 }
               });
             }

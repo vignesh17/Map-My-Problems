@@ -62,6 +62,13 @@
                                         </div>
                                     ';
                                 }
+                                if ($_SESSION['spam'] == 1) {
+                                    echo '
+                                        <div class="form-group text-center">
+                                            <label class="login-error">You have been logged out for spamming. Repeating this will result in banning of your account.</label>
+                                        </div>
+                                    ';
+                                }
                                 if (isset($_SESSION['login-error'])) {
                                     if ($_SESSION['login-error'] == 1) {
                                         echo '
