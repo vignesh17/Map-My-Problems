@@ -1,8 +1,10 @@
 <?php
 	ob_start();
 	session_start();
+	require_once "class.phpmailer.php";
+	require_once "class.smtp.php";
 
-	$liveServer = 0;
+	$liveServer = 1;
 
 	require_once "recaptchalib.php";
 	$secret = "6LcbKhETAAAAAEhXBtoLAZtNQIT9Mcz8GXLyysnB";
@@ -40,38 +42,44 @@
 
 		$m = new MongoClient();
 		$db = $m -> map;
-		$collection = $db -> users;
-
-		
+		$collection = $db -> users;		
 
 		if($liveServer) {
 
 			$alreadyExists = (($collection -> count(array('username' => $username))) + ($collection -> count(array('email' => $email))));
 			if(!$alreadyExists) {
-				$user = array('name' => $name, 'username' => $username, 'pass' => $hashpass, 'email' => $email, 'active' => 0, 'verify' => crc32($email));
+				$code = (string)crc32($email);
+				$user = array('name' => $name, 'username' => $username, 'pass' => $hashpass, 'email' => $email, 'active' => 0, 'verify' => $code);
 				$collection -> insert($user);
-			    $subject = 'Confirmation';
-				$message = 'Open this link to verify' . '<a href="map.com/verify.php?id='.crc32($email).'">map.com/verify.php?id='.crc32($email).'</a>';
-				$to = '$email';
-				$type = 'HTML'; 
-				$charset = 'utf-8';
+				$file = fopen("password.txt", "r") or die("Password not found");
+				$mail=new PHPMailer();
+				$mail->CharSet = 'UTF-8';
+				$message = 'Open this link to verify <br><br><b>map.sivasubramanyam.me/verify.php?id='.$code.'</b>';
 
-				$mail     = 'no-reply@'.str_replace('www.', '', $_SERVER['SERVER_NAME']);
-				$uniqid   = md5(uniqid(time()));
-				$headers  = 'From: '.$mail."\n";
-				$headers .= 'Reply-to: '.$mail."\n";
-				$headers .= 'Return-Path: '.$mail."\n";
-				$headers .= 'Message-ID: <'.$uniqid.'@'.$_SERVER['SERVER_NAME'].">\n";
-				$headers .= 'MIME-Version: 1.0'."\n";
-				$headers .= 'Date: '.gmdate('D, d M Y H:i:s', time())."\n";
-				$headers .= 'X-Priority: 3'."\n";
-				$headers .= 'X-MSMail-Priority: Normal'."\n";
-				$headers .= 'Content-Type: multipart/mixed;boundary="----------'.$uniqid.'"'."\n\n";
-				$headers .= '------------'.$uniqid."\n";
-				$headers .= 'Content-type: text/'.$type.';charset='.$charset.''."\n";
-				$headers .= 'Content-transfer-encoding: 7bit';
+				$mail->IsSMTP();
+				$mail->Host       = 'smtp.zoho.com';
 
-				$ma = mail($to, $subject, $message, $headers);
+				$mail->SMTPSecure = 'tls';
+				$mail->Port       = 587;
+				$mail->SMTPDebug  = 1;
+				$mail->SMTPAuth   = true;
+				$mail->IsHTML = true;
+
+				$mail->Username   = 'contact@sivasubramanyam.me';
+				$mail->Password   = fgets($file);
+				fclose($file);
+
+				$mail->SetFrom('contact@sivasubramanyam.me', 'MapMyProblems');
+
+				$mail->Subject = 'Verify your account - MapMyProblems';
+				$mail->MsgHTML($message);
+
+				$mail->AddAddress($email, $name);
+
+
+				$mail->send();
+				header('Location:login.php');
+
 			}
 			else {
 				$_SESSION['username-exists'] = 1;
