@@ -55,7 +55,7 @@
                                 </ul>
                             </div>
                             <div class="form-group text-center" id="spam-error" style="visibility:hidden;height:0;">
-                                <label class="login-error">JS You have been logged out for spamming. Repeating this will result in banning of your account.</label>
+                                <label class="login-error">You have been logged out for spamming. Repeating this will result in banning of your account.</label>
                             </div>
                             <?php
                                 if ($_SESSION['reset'] == 1) {
@@ -68,7 +68,7 @@
                                 if (isset($_SESSION['spam'])) {
                                     echo '
                                         <div class="form-group text-center">
-                                            <label class="login-error">PHP You have been logged out for spamming. Repeating this will result in banning of your account.</label>
+                                            <label class="login-error">You have been logged out for spamming. Repeating this will result in banning of your account.</label>
                                         </div>
                                     ';
                                 }
