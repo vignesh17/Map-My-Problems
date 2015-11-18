@@ -48,12 +48,12 @@
 							{"lightness":17},{"weight":1.2}]},{"featureType":"administrative.country",
 							"elementType":"geometry","stylers":[{"visibility":"on"},{"hue":"#ff0000"}]},
 							{"featureType":"administrative.province","elementType":"geometry","stylers":[
-							{"color":"#ffffff"}]},{"featureType":"administrative.locality","elementType":"labels.text",
+							{"color":"#cccccc"}]},{"featureType":"administrative.locality","elementType":"labels.text",
 							"stylers":[{"visibility":"on"}]},{"featureType":"administrative.locality",
-							"elementType":"labels.text.fill","stylers":[{"color":"#ffffff"}]},
+							"elementType":"labels.text.fill","stylers":[{"color":"#cccccc"}]},
 							{"featureType":"administrative.locality","elementType":"labels.icon","stylers":[
 							{"color":"#ff0000"}]},{"featureType":"administrative.neighborhood","elementType":"labels.text",
-							"stylers":[{"color":"#ffffff"}]},{"featureType":"administrative.neighborhood",
+							"stylers":[{"color":"#cccccc"}]},{"featureType":"administrative.neighborhood",
 							"elementType":"labels.text.stroke","stylers":[{"weight":"1.45"},{"gamma":"1.30"},
 							{"lightness":"-13"},{"saturation":"-11"}]},{"featureType":"landscape",
 							"elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":20}]},
@@ -67,7 +67,7 @@
 							{"color":"#000000"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry",
 							"stylers":[{"color":"#000000"},{"lightness":16}]},{"featureType":"transit","elementType":"geometry",
 							"stylers":[{"color":"#000000"},{"lightness":19}]},{"featureType":"water","elementType":"geometry",
-							"stylers":[{"color":"#34687d"},{"lightness":17}]}
+							"stylers":[{"color":"#34687d"},{"lightness":0}]}
 					]
 				});
 				
@@ -171,15 +171,7 @@
 				window.oms = oms;
 
 				var markerClusterer = new MarkerClusterer(window.map, globalMarkers);
-
-				google.maps.event.addListener(markerClusterer, 'clusterclick', function (cluster) {
-					var markers = $.extend(true, {}, cluster.getMarkers());
-					var marker = markers[0];
-					var break_loop = false;
-					var minClusterZoom = 13;
-					markerClusterer.setMaxZoom(minClusterZoom);
-					window.map.setCenter(cluster.getCenter());
-				});
+				markerClusterer.setMaxZoom(13);
 
 				<?php
 					if (isset($_SESSION["voteError"])) {
