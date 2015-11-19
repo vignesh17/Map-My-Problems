@@ -18,9 +18,8 @@
 	$mail->CharSet = 'UTF-8';
 	$url = 'profileupdate.php';
 
-	$body = 'Please use this <a href="'.$url.'">link</a> to reset your password/update your profile.<br><br>
-			Key:&nbsp;&nbsp;&nbsp;<h4>'.$key.'</h4><br><br>
-			<br>Please ignore this mail if you have not received this voluntarily.';
+	$body = 'Open this link to reset your password. <br><br><b>map.sivasubramanyam.me/profileupdate.php?id='.$code.'</b>';
+
 
 	$mail->IsSMTP();
 	$mail->Host       = 'smtp.zoho.com';

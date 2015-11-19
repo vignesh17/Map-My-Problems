@@ -80,6 +80,13 @@
                                             </div>
                                         ';
                                     }
+                                    elseif ($_SESSION['login-error'] == 3) {
+                                        echo '
+                                            <div class="form-group text-center">
+                                                <label class="login-error">Check your mail for activation link.</label>
+                                            </div>
+                                        ';
+                                    }
                                     else {
                                         echo '
                                             <div class="form-group text-center">

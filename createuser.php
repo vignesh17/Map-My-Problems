@@ -77,6 +77,7 @@
 
 
 				$mail -> send();
+				$_SESSION['login-error'] = 3;
 				header('Location:login.php');
 
 			}

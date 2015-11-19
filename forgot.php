@@ -36,7 +36,7 @@
             <div class="col-md-4 col-md-offset-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Login</h3>
+                        <h3 class="panel-title">Forgot Password</h3>
                     </div>
                     <div class="panel-body">
                         <form role="form" action="forgotmailer.php" method="post">
@@ -53,7 +53,7 @@
                                             </div>
                                         ';
                                     } else
-                                    if ($_SESSION['login-error'] == 2) {
+                                    if ($_SESSION['login-error'] == 3) {
                                         echo '
                                             <div class="form-group text-center">
                                                 <label class="login-error">Reset link has been mailed.</label>
