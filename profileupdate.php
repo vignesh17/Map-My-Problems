@@ -66,6 +66,7 @@
                                             <label class="login-error">Session expired. Please reopen the link in your mail.</label>
                                         </div>
                                     ';
+                                    session_destroy();
                                 }
                                 $_SESSION["key"] = $_GET['id'];
                                 if ($_SESSION['captcha']) {
@@ -74,6 +75,7 @@
                                             <label class="login-error">Please prove that you are human</label>
                                         </div>
                                     ';
+                                    session_destroy();
                                 }
                                 if ($_SESSION['invalid']) {
                                     echo '
@@ -81,6 +83,7 @@
                                             <label class="login-error">Invalid key/email.</label>
                                         </div>
                                     ';
+                                    session_destroy();
                                 }
                                 if ($_SESSION['password-mismatch']) {
                                     echo '
@@ -88,8 +91,8 @@
                                             <label class="login-error">Passwords do not match.</label>
                                         </div>
                                     ';
+                                    session_destroy();
                                 }
-                                session_destroy();
                             ?>
                             </fieldset>
                         </form>
