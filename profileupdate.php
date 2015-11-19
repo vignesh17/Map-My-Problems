@@ -1,6 +1,9 @@
 <?php
     ob_start();
     session_start();
+    if (!isset($_GET["id"])) {
+        echo 'window.alert("Your session has expired. Please open the link again from your mail.");';
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
