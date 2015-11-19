@@ -1,9 +1,6 @@
 <?php
     ob_start();
     session_start();
-    if (!isset($_GET["id"])) {
-        echo 'window.alert("Your session has expired. Please open the link again from your mail.");';
-    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -94,6 +91,13 @@
             </div>
         </div>
     </div>
+    <?php
+        if (!isset($_GET["id"])) {
+            echo '<script>';
+                echo 'window.alert("Your session has expired. Please open the link again from your mail.");';
+            echo '</script>';
+        }
+    ?>
     <script> 
         $.validate(); 
         $.formUtils.addValidator({
