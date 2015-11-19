@@ -16,9 +16,8 @@
 
 	$mail=new PHPMailer();
 	$mail->CharSet = 'UTF-8';
-	$url = 'profileupdate.php';
 
-	$body = 'Open this link to reset your password. <br><br><b>map.sivasubramanyam.me/profileupdate.php?id='.$code.'</b>';
+	$body = 'Open this link to reset your password. <br><br><b>map.sivasubramanyam.me/profileupdate.php?id='.$key.'</b>';
 
 
 	$mail->IsSMTP();
@@ -42,7 +41,7 @@
 	$mail->AddAddress($_POST["email"], $_POST["email"]);
 
 	$mail->send();
-	$_SESSION['login-error'] = 2;
+	$_SESSION['login-error'] = 3;
 	header('Location:forgot.php');
 
 
