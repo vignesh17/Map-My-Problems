@@ -60,6 +60,13 @@
                                 <div style="text-align: -webkit-center;margin-bottom: 10px;" class="g-recaptcha" data-theme="dark" data-sitekey="6LcbKhETAAAAAG0qN3ebzmdKFqTMCDJI8gv4GWyo"></div>
                                 <input class="btn btn-lg btn-success btn-block" type="submit" value="Reset">
                                 <?php
+                                if (!isset($_GET['id'])){
+                                    echo '
+                                        <div class="form-group text-center">
+                                            <label class="login-error">Session expired. Please reopen the link in your mail.</label>
+                                        </div>
+                                    ';
+                                }
                                 $_SESSION["key"] = $_GET['id'];
                                 if ($_SESSION['captcha']) {
                                     echo '
@@ -91,13 +98,6 @@
             </div>
         </div>
     </div>
-    <?php
-        if (!isset($_GET["id"])) {
-            echo '<script>';
-                echo 'window.alert("Your session has expired. Please open the link again from your mail.");';
-            echo '</script>';
-        }
-    ?>
     <script> 
         $.validate(); 
         $.formUtils.addValidator({
