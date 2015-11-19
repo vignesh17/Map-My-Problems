@@ -18,7 +18,7 @@
 	if ($response != null && $response->success) {
 
 		$email = $_POST["email"];
-		$key = $_SESSION["id"];
+		$key = $_SESSION["key"];
 		$pass = $_POST["password"];
 		$cpass = $_POST["cpassword"];
 		$const = $_POST["constituency"];
@@ -28,6 +28,7 @@
 		$collection = $db -> forgot;
 
 		$check = $collection -> count(array('email' => $email, 'key' => $key));
+
 		if($check) {
 			if(strcmp($pass, $cpass) == 0) {
 				$hashpass = md5($pass);
