@@ -18,7 +18,7 @@
 	if ($response != null && $response->success) {
 
 		$email = $_POST["email"];
-		$key = $_POST["key"];
+		$key = $_GET["id"];
 		$pass = $_POST["password"];
 		$cpass = $_POST["cpassword"];
 		$const = $_POST["constituency"];

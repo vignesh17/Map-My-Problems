@@ -45,9 +45,6 @@
                                     <input class="form-control" data-validation="email" placeholder="Email" name="email" type="text" value="">
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control" data-validation="length" data-validation-length="min10" placeholder="Key" name="key" type="text">
-                                </div>
-                                <div class="form-group">
                                     <input class="form-control" data-validation="length alphanumeric" data-validation-length="min8" placeholder="Password" name="password" type="password" value="">
                                 </div>
                                 <div class="form-group">
@@ -63,6 +60,7 @@
                                 <div style="text-align: -webkit-center;margin-bottom: 10px;" class="g-recaptcha" data-theme="dark" data-sitekey="6LcbKhETAAAAAG0qN3ebzmdKFqTMCDJI8gv4GWyo"></div>
                                 <input class="btn btn-lg btn-success btn-block" type="submit" value="Reset">
                                 <?php
+                                $_SESSION["key"] = $_GET['id'];
                                 if ($_SESSION['captcha']) {
                                     echo '
                                         <div class="form-group text-center">
