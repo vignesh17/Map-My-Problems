@@ -1,0 +1,2 @@
+use TTL on MongoDB
+$collection->ensureIndex(array('blockedAt' => 1), array('expireAfterSeconds' => 30));

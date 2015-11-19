@@ -31,6 +31,27 @@
 					}
 				}
 			}
+
+			$collection = $db -> attempts;
+			$incorrectAttempts = $collection -> count(array("ip" => $_SERVER['REMOTE_ADDR']));
+			if ($incorrectAttempts) {
+				$attempts = $collection -> find(array("ip" => $_SERVER['REMOTE_ADDR']));
+				foreach ($attempts as $attempt) {
+					$wrongAttempts = $attempt["count"];
+					if ($wrongAttempts < 3) {
+						$collection -> update(array("ip" => $_SERVER['REMOTE_ADDR']), array('$inc' => array("count" => 1)));
+					}
+					else {
+						$collection -> update(array("ip" => $_SERVER['REMOTE_ADDR']), array('$set' => array("blockedAt" => new MongoDate(), "blocked" => 1)));
+						$collection->ensureIndex(array('blockedAt' => 1), array('expireAfterSeconds' => 30));
+						$_SESSION["locked"] = 1;
+					}
+				}
+			}
+			else {
+				$collection -> insert(array("ip" => $_SERVER['REMOTE_ADDR'], "count" => 1));
+			}
+
 			$_SESSION['spam'] = 1;
 			header('Location:login.php');
 		}
@@ -48,6 +69,11 @@
 						)
 					);
 				}
+			}
+			$collection = $db -> attempts;
+			$incorrectAttempts = $collection -> count(array("ip" => $_SERVER['REMOTE_ADDR']));
+			if ($incorrectAttempts) {
+				$collection -> update(array('ip' => $_SERVER['REMOTE_ADDR']), array('$set' => array('count' => 0)));
 			}
 			header('Location:report.php');
 		}

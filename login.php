@@ -65,6 +65,13 @@
                                         </div>
                                     ';
                                 }
+                                if (isset($_SESSION['locked'])) {
+                                    echo '
+                                        <div class="form-group text-center">
+                                            <label class="login-error">Your IP address has been flagged for suspicious activity. You have been temporarily banned.</label>
+                                        </div>
+                                    ';
+                                }
                                 if (isset($_SESSION['spam'])) {
                                     echo '
                                         <div class="form-group text-center">
