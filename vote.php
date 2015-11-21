@@ -44,7 +44,6 @@
 
 			else {
 				foreach ($cursor as $doc) {
-
 					if ((!in_array($fromuser, $doc["voters"])) and (!in_array($fromuser, $doc["downvoters"]))){
 						$collection -> update($idArray, 
 							array('$push' => array("downvoters" => $fromuser),
@@ -71,6 +70,14 @@
 					}
 					
 				}
+			}
+		}
+
+		$cursor = $collection -> find($idArray);
+		foreach ($cursor as $doc) {
+			$voteCount = $doc["votes"];
+			if ($voteCount < -50) {
+				$collection -> remove($idArray);
 			}
 		}
 		header('Location:report.php');

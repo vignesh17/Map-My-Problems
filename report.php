@@ -468,7 +468,6 @@
 								foreach ($cursor as $doc) {
 									if($doc["status"] == "open") {
 										echo "<p id='" .  $doc["_id"] . "'>" . $doc["title"] . "&nbsp;<a style='font-size: 14px;' href='#' onClick=closeComplaint('" . $doc["_id"] . "')" . ">Close Complaint</a><br></p>\n";
-										//echo $doc["title"]."&nbsp;<a style='font-size: 14px;' href='close.php?id=" . $doc["_id"]  . "'>Close Complaint</a><br>";
 									} 
 								};
 							}
