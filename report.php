@@ -97,7 +97,7 @@
 				  controlText.innerHTML = 'Highlight Roads';
 				  controlUI.appendChild(controlText);
 
-				  // Setup the click event listeners: simply set the map to Chicago.
+				  // Setup the click event listeners
 				  controlUI.addEventListener('click', function() {
 				    map.setOptions({
 						zoom: 12,
@@ -419,10 +419,10 @@
 					<form action="" method="post" name="form">
 						<fieldset>
 							<div class="form-group">
-								<input class="form-control" data-validation="length normaltext" data-validation-length="min8" placeholder="Complaint Title" name="title" id="title" type="text">
+								<input class="form-control" data-validation="custom" data-validation-regexp="^([a-zA-Z0-9.!-\s]+)$" data-validation-length="min8" placeholder="Complaint Title" name="title" id="title" type="text">
 							</div>
 							<div class="form-group">
-								<textarea class="form-control" data-validation="length normaltext" data-validation-length="min50 max300" name="description" id="description" placeholder="Complaint Description" rows="4"></textarea>
+								<textarea class="form-control" data-validation="custom" data-validation-regexp="^([a-zA-Z0-9.!-\s]+)$" data-validation-length="min50 max300" name="description" id="description" placeholder="Complaint Description" rows="4"></textarea>
 							</div>
 							<div class="form-group">
 								<input class="form-control" id="pac-input" placeholder="Location" name="location" type="text">
