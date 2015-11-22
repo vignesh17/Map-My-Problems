@@ -45,10 +45,10 @@
                                     <input class="form-control" data-validation="email" placeholder="Email" name="email" type="text" value="">
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control" data-validation="length alphanumeric" data-validation-length="min8" placeholder="Password" name="password" type="password" value="">
+                                    <input class="form-control" data-validation="length" data-validation-length="min8" placeholder="Password" name="password" type="password" value="">
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control" data-validation="length alphanumeric" data-validation-length="min8" placeholder="Confirm Password" name="cpassword" type="password" value="">
+                                    <input class="form-control" data-validation="length" data-validation-length="min8" placeholder="Confirm Password" name="cpassword" type="password" value="">
                                 </div>
                                 <div class="form-group">
                                     <select class="form-control" name="constituency">

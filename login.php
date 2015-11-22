@@ -45,7 +45,7 @@
                                 <input class="form-control" data-validation="length alphanumeric" data-validation-length="min6" placeholder="Username" name="username" type="text">
                             </div>
                             <div class="form-group">
-                                <input class="form-control" data-validation="length alphanumeric" data-validation-length="min8" placeholder="Password" name="password" type="password" value="">
+                                <input class="form-control" data-validation="length" data-validation-length="min8" placeholder="Password" name="password" type="password" value="">
                             </div>
                             <div class="form-group">
                                 <ul class="login-helper">
