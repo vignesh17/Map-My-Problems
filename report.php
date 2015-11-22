@@ -72,7 +72,12 @@
 					]
 				});
 
-				function CenterControl(controlDiv, map) {
+				//custom map controls
+
+				//Roads
+				var roadsFlag = 0;
+
+				function CenterControlRoads(controlDiv, map) {
 
 				  
 				  // Set CSS for the control border.
@@ -99,57 +104,148 @@
 
 				  // Setup the click event listeners
 				  controlUI.addEventListener('click', function() {
-				    map.setOptions({
-						zoom: 12,
-						center: chennai,
-						rotateControl: true,
-						styles: [
-							{"featureType":"all","elementType":"labels.text.fill",
-						"stylers":[{"saturation":36},{"color":"#000000"},{"lightness":40}]},
-						{"featureType":"all","elementType":"labels.text.stroke","stylers":[
-						{"visibility":"on"},{"color":"#000000"},{"lightness":16}]},
-						{"featureType":"all","elementType":"labels.icon","stylers":[
-						{"visibility":"off"}]},{"featureType":"administrative",
-						"elementType":"geometry.fill","stylers":[{"color":"#000000"},
-						{"lightness":20}]},{"featureType":"administrative",
-						"elementType":"geometry.stroke","stylers":[{"color":"#000000"},
-						{"lightness":17},{"weight":1.2}]},{"featureType":"administrative.country",
-						"elementType":"geometry","stylers":[{"visibility":"on"},{"hue":"#ff0000"}]},
-						{"featureType":"administrative.province","elementType":"geometry","stylers":[
-						{"color":"#cccccc"}]},{"featureType":"administrative.locality","elementType":"labels.text",
-						"stylers":[{"visibility":"on"}]},{"featureType":"administrative.locality",
-						"elementType":"labels.text.fill","stylers":[{"color":"#cccccc"}]},
-						{"featureType":"administrative.locality","elementType":"labels.icon","stylers":[
-						{"color":"#ff0000"}]},{"featureType":"administrative.neighborhood","elementType":"labels.text",
-						"stylers":[{"color":"#cccccc"}]},{"featureType":"administrative.neighborhood",
-						"elementType":"labels.text.stroke","stylers":[{"weight":"1.45"},{"gamma":"1.30"},
-						{"lightness":"-13"},{"saturation":"-11"}]},{"featureType":"landscape",
-						"elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":20}]},
-						{"featureType":"landscape.natural.terrain","elementType":"geometry","stylers":[
-						{"saturation":"-4"},{"lightness":"2"},{"gamma":"1.35"}]},{"featureType":"poi",
-						"elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":21}]},
-						{"featureType":"road.highway","elementType":"geometry.fill","stylers":[
-						{"color":"#FFFFFF"},{"lightness":17}]},{"featureType":"road.highway",
-						"elementType":"geometry.stroke","stylers":[{"color":"#FFFFFF"},{"lightness":29},
-						{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[
-						{"color":"#FFFFFF"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry",
-						"stylers":[{"color":"#FFFFFF"},{"lightness":16}]},{"featureType":"transit","elementType":"geometry",
-						"stylers":[{"color":"#FFFFFF"},{"lightness":19}]},{"featureType":"water","elementType":"geometry",
-						"stylers":[{"color":"#34687d"},{"lightness":0}]}
-						]
-					}
-				    	);
+				  	if (roadsFlag == 0) {
+				  		roadsFlag = 1;
+				  		map.setOptions({
+							rotateControl: true,
+							styles: [
+								{"featureType":"all","elementType":"labels.text.fill",
+							"stylers":[{"saturation":36},{"color":"#000000"},{"lightness":40}]},
+							{"featureType":"all","elementType":"labels.text.stroke","stylers":[
+							{"visibility":"on"},{"color":"#000000"},{"lightness":16}]},
+							{"featureType":"all","elementType":"labels.icon","stylers":[
+							{"visibility":"off"}]},{"featureType":"administrative",
+							"elementType":"geometry.fill","stylers":[{"color":"#000000"},
+							{"lightness":20}]},{"featureType":"administrative",
+							"elementType":"geometry.stroke","stylers":[{"color":"#000000"},
+							{"lightness":17},{"weight":1.2}]},{"featureType":"administrative.country",
+							"elementType":"geometry","stylers":[{"visibility":"on"},{"hue":"#ff0000"}]},
+							{"featureType":"administrative.province","elementType":"geometry","stylers":[
+							{"color":"#cccccc"}]},{"featureType":"administrative.locality","elementType":"labels.text",
+							"stylers":[{"visibility":"on"}]},{"featureType":"administrative.locality",
+							"elementType":"labels.text.fill","stylers":[{"color":"#cccccc"}]},
+							{"featureType":"administrative.locality","elementType":"labels.icon","stylers":[
+							{"color":"#ff0000"}]},{"featureType":"administrative.neighborhood","elementType":"labels.text",
+							"stylers":[{"color":"#cccccc"}]},{"featureType":"administrative.neighborhood",
+							"elementType":"labels.text.stroke","stylers":[{"weight":"1.45"},{"gamma":"1.30"},
+							{"lightness":"-13"},{"saturation":"-11"}]},{"featureType":"landscape",
+							"elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":20}]},
+							{"featureType":"landscape.natural.terrain","elementType":"geometry","stylers":[
+							{"saturation":"-4"},{"lightness":"2"},{"gamma":"1.35"}]},{"featureType":"poi",
+							"elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":21}]},
+							{"featureType":"road.highway","elementType":"geometry.fill","stylers":[
+							{"color":"#FFFFFF"},{"lightness":17}]},{"featureType":"road.highway",
+							"elementType":"geometry.stroke","stylers":[{"color":"#FFFFFF"},{"lightness":29},
+							{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[
+							{"color":"#FFFFFF"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry",
+							"stylers":[{"color":"#FFFFFF"},{"lightness":16}]},{"featureType":"transit","elementType":"geometry",
+							"stylers":[{"color":"#FFFFFF"},{"lightness":19}]},{"featureType":"water","elementType":"geometry",
+							"stylers":[{"color":"#34687d"},{"lightness":0}]}
+							]
+						});
+				  	} 
+				  	else{
+				  		roadsFlag = 0;
+				  		map.setOptions({
+							rotateControl: true,
+							styles: [
+								{"featureType":"all","elementType":"labels.text.fill",
+									"stylers":[{"saturation":36},{"color":"#000000"},{"lightness":40}]},
+								{"featureType":"all","elementType":"labels.text.stroke","stylers":[
+								{"visibility":"on"},{"color":"#000000"},{"lightness":16}]},
+								{"featureType":"all","elementType":"labels.icon","stylers":[
+								{"visibility":"off"}]},{"featureType":"administrative",
+								"elementType":"geometry.fill","stylers":[{"color":"#000000"},
+								{"lightness":20}]},{"featureType":"administrative",
+								"elementType":"geometry.stroke","stylers":[{"color":"#000000"},
+								{"lightness":17},{"weight":1.2}]},{"featureType":"administrative.country",
+								"elementType":"geometry","stylers":[{"visibility":"on"},{"hue":"#ff0000"}]},
+								{"featureType":"administrative.province","elementType":"geometry","stylers":[
+								{"color":"#cccccc"}]},{"featureType":"administrative.locality","elementType":"labels.text",
+								"stylers":[{"visibility":"on"}]},{"featureType":"administrative.locality",
+								"elementType":"labels.text.fill","stylers":[{"color":"#cccccc"}]},
+								{"featureType":"administrative.locality","elementType":"labels.icon","stylers":[
+								{"color":"#ff0000"}]},{"featureType":"administrative.neighborhood","elementType":"labels.text",
+								"stylers":[{"color":"#cccccc"}]},{"featureType":"administrative.neighborhood",
+								"elementType":"labels.text.stroke","stylers":[{"weight":"1.45"},{"gamma":"1.30"},
+								{"lightness":"-13"},{"saturation":"-11"}]},{"featureType":"landscape",
+								"elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":20}]},
+								{"featureType":"landscape.natural.terrain","elementType":"geometry","stylers":[
+								{"saturation":"-4"},{"lightness":"2"},{"gamma":"1.35"}]},{"featureType":"poi",
+								"elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":21}]},
+								{"featureType":"road.highway","elementType":"geometry.fill","stylers":[
+								{"color":"#000000"},{"lightness":17}]},{"featureType":"road.highway",
+								"elementType":"geometry.stroke","stylers":[{"color":"#000000"},{"lightness":29},
+								{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[
+								{"color":"#000000"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry",
+								"stylers":[{"color":"#000000"},{"lightness":16}]},{"featureType":"transit","elementType":"geometry",
+								"stylers":[{"color":"#000000"},{"lightness":19}]},{"featureType":"water","elementType":"geometry",
+								"stylers":[{"color":"#34687d"},{"lightness":0}]}
+							]
+						});
+				  	};
+				    
 				  });
 
 				}
 
 				// Create the DIV to hold the control and call the CenterControl() constructor
 				// passing in this DIV.
-				var centerControlDiv = document.createElement('div');
-				var centerControl = new CenterControl(centerControlDiv, map);
+				var centerControlDivRoads = document.createElement('div');
+				var centerControlRoads = new CenterControlRoads(centerControlDivRoads, map);
 
-				centerControlDiv.index = 1;
-				map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+				centerControlDivRoads.index = 1;
+				map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDivRoads);
+
+				//Traffic View
+				var trafficFlag = 0;
+				var trafficLayer = new google.maps.TrafficLayer();
+
+				function CenterControlTraffic(controlDiv, map) {
+
+				  
+				  // Set CSS for the control border.
+				  var controlUI = document.createElement('div');
+				  controlUI.style.backgroundColor = '#fff';
+				  controlUI.style.border = '2px solid #fff';
+				  controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+				  controlUI.style.cursor = 'pointer';
+				  controlUI.style.marginBottom = '22px';
+				  controlUI.style.marginTop = '5px';
+				  controlUI.style.textAlign = 'center';
+				  controlDiv.appendChild(controlUI);
+
+				  // Set CSS for the control interior.
+				  var controlText = document.createElement('div');
+				  controlText.style.color = 'rgb(25,25,25)';
+				  controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+				  controlText.style.fontSize = '11px';
+				  controlText.style.lineHeight = '13px';
+				  controlText.style.paddingLeft = '2px';
+				  controlText.style.paddingRight = '2px';
+				  controlText.innerHTML = 'Live Traffic';
+				  controlUI.appendChild(controlText);
+
+				  // Setup the click event listeners
+				  controlUI.addEventListener('click', function() {
+				  	if (trafficFlag == 0) {
+				  		trafficFlag = 1;
+  						trafficLayer.setMap(map);
+				  	} 
+				  	else{
+				  		trafficFlag = 0;
+  						trafficLayer.setMap(null);
+				  	};
+				    
+				  });
+
+				}
+
+				var centerControlDivTraffic = document.createElement('div');
+				var centerControlTraffic = new CenterControlTraffic(centerControlDivTraffic, map);
+
+				centerControlDivTraffic.index = 1;
+				map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDivTraffic);
 				
 				//Initialise infowindows and OMS
 				var iw = new gm.InfoWindow();
