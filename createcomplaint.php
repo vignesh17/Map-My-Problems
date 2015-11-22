@@ -26,7 +26,7 @@
 					}
 					else {
 						$collection -> update(array("ip" => $_SERVER['REMOTE_ADDR']), array('$set' => array("blockedAt" => new MongoDate(), "blocked" => 1)));
-						$collection->ensureIndex(array('blockedAt' => 1), array('expireAfterSeconds' => 30));
+						$collection->ensureIndex(array('blockedAt' => 1), array('expireAfterSeconds' => 900));
 						$_SESSION["locked"] = 1;
 					}
 				}
@@ -50,7 +50,7 @@
 						}
 						else {
 							$collection -> update(array("ip" => $_SERVER['REMOTE_ADDR']), array('$set' => array("blockedAt" => new MongoDate(), "blocked" => 1)));
-							$collection->ensureIndex(array('blockedAt' => 1), array('expireAfterSeconds' => 30));
+							$collection->ensureIndex(array('blockedAt' => 1), array('expireAfterSeconds' => 900));
 							$_SESSION["locked"] = 1;
 						}
 					}
