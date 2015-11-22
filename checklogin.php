@@ -16,8 +16,8 @@
 
 
 	if ($response != null && $response->success) {
-    	$username = $_POST['username'];
-		$password = md5($_POST['password']);
+    	$username = (string)$_POST['username'];
+		$password = md5((string)$_POST['password']);
 		$m = new MongoClient();
 		$db = $m -> map;
 		$collection = $db -> users;

@@ -8,7 +8,7 @@
 		$username = $_SESSION['username'];
 		$fromuser = $_GET['user'];
 		$id = $_GET['id'];
-		$comment = $_POST['comment'];	
+		$comment = (string)$_POST['comment'];	
 		if (strlen($_POST['comment']) < 2) {
 			header('Location:report.php');
 		}	

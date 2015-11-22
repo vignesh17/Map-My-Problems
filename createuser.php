@@ -24,12 +24,12 @@
 			header('Location:signup.php');
 		}
 
-		$name = $_POST["name"];
-		$username = $_POST["username"];
-		$pass = $_POST["password"];
-		$cpass = $_POST["cpassword"];
-		$email = $_POST["email"];
-		$const = $_POST["constituency"];
+		$name = (string)$_POST["name"];
+		$username = (string)$_POST["username"];
+		$pass = (string)$_POST["password"];
+		$cpass = (string)$_POST["cpassword"];
+		$email = (string)$_POST["email"];
+		$const = (string)$_POST["constituency"];
 
 		if(strcmp($pass, $cpass) == 0) {
 			$hashpass = md5($pass);

@@ -17,11 +17,11 @@
 
 	if ($response != null && $response->success) {
 
-		$email = $_POST["email"];
+		$email = (string)$_POST["email"];
 		$key = $_SESSION["key"];
-		$pass = $_POST["password"];
-		$cpass = $_POST["cpassword"];
-		$const = $_POST["constituency"];
+		$pass = (string)$_POST["password"];
+		$cpass = (string)$_POST["cpassword"];
+		$const = (string)$_POST["constituency"];
 
 		$m = new MongoClient();
 		$db = $m -> map;
