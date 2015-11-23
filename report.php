@@ -513,7 +513,7 @@
 
 		<div class="container map-holder">
 			<div class="row map-holder">
-				<div class="col-md-4">
+				<div class="col-md-4 complaint-form">
 					<form action="" method="post" name="form">
 						<fieldset>
 							<div class="form-group">
