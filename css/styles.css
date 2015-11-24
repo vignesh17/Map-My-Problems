@@ -11,7 +11,7 @@ html, body {
 }
 
 nav.navbar.navbar-default.row {
-	background: #4489A5;
+	background: rgb(6, 217, 149);
 	border: none;
 }
 
@@ -35,9 +35,30 @@ a.navbar-brand:active {
     color: white;
 }
 
+i.fa.fa-sign-out {
+    color: white;
+}
+
+i.fa.fa-sign-out:link {
+    color: white;
+}
+
+i.fa.fa-sign-out:visited {
+    color: white;
+}
+
+i.fa.fa-sign-out:hover {
+    color: white;
+}
+
+i.fa.fa-sign-out:active {
+    color: white;
+}
+
 .main-page {
 	background-color: #2f2f2f;
-    padding-right: 17px;
+    overflow-x: hidden;
+    /*padding-right: 17px;*/
 }
 
 .complaint-form {
@@ -49,7 +70,7 @@ a.navbar-brand:active {
     margin-top: 10px;*/
     height: 91%;
     margin-top: -10px;
-    margin-right: -16px;
+    margin-right: -7px;
 }
 
 .map-pane {
@@ -135,4 +156,14 @@ height: 100%;
 .complaints {
     font-size: 18px;
     color: white;
+}
+
+i.fa.fa-thumbs-down {
+    font-size: 20px;
+    color: #FF4241;
+}
+
+i.fa.fa-thumbs-up {
+    font-size: 20px;
+    color: rgb(6, 217, 149);
 }
