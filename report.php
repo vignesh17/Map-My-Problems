@@ -10,6 +10,7 @@
 	<head>
 		<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 		<link rel="stylesheet" type="text/css" href="css/styles.css">
 		<meta charset="utf-8">
 		<title>Map My Problems</title>
@@ -246,6 +247,63 @@
 
 				centerControlDivTraffic.index = 1;
 				map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDivTraffic);
+
+
+				//Closed Complaints
+
+				function CenterControlClosed(controlDiv, map) {
+
+				  
+				  // Set CSS for the control border.
+				  var controlUI = document.createElement('div');
+				  controlUI.style.backgroundColor = '#fff';
+				  controlUI.style.border = '2px solid #fff';
+				  controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+				  controlUI.style.cursor = 'pointer';
+				  controlUI.style.marginBottom = '22px';
+				  controlUI.style.marginTop = '5px';
+				  controlUI.style.textAlign = 'center';
+				  controlDiv.appendChild(controlUI);
+
+				  // Set CSS for the control interior.
+				  var controlText = document.createElement('div');
+				  controlText.style.color = 'rgb(25,25,25)';
+				  controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+				  controlText.style.fontSize = '11px';
+				  controlText.style.lineHeight = '13px';
+				  controlText.style.paddingLeft = '2px';
+				  controlText.style.paddingRight = '2px';
+				  controlText.innerHTML = 'Toggle Closed Complaints';
+				  controlUI.appendChild(controlText);
+
+				  // Setup the click event listeners
+				  controlUI.addEventListener('click', function() {
+				  	if(sessionStorage.closed) {
+				  		if (sessionStorage.closed == 0) {
+					  		sessionStorage.closed = 1;
+					  		window.location = 'report.php?closed=true';
+					  	} 
+					  	else{
+					  		sessionStorage.closed = 0;
+	  						window.location = 'report.php';
+					  	};
+				  	}
+				  	else {
+				  		sessionStorage.closed = 1;
+					  	window.location = 'report.php?closed=true';
+				  	}
+				  	
+				    
+				  });
+
+				}
+
+				var centerControlDivClosed = document.createElement('div');
+				var centerControlTraffic = new CenterControlClosed(centerControlDivClosed, map);
+
+				centerControlDivClosed.index = 1;
+				map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDivClosed);
+
 				
 				//Initialise infowindows and OMS
 				var iw = new gm.InfoWindow();
@@ -346,7 +404,7 @@
 								strokeOpacity: 0.9,
 							},
 							animation: anim,
-							info: "<h4 class='report-title'>"+datum.title+"</h4><h5>Tagged at: "+datum.taggedAt+"</h5><br><h6>Currently voted by "+datum.votes+" people<br><br><a href='vote.php?vote=up&id="+datum.id+'&user='+datum.user+"'>"+"Vote Up</a>"+"\n"+"&nbsp;&nbsp;&nbsp;<a href='vote.php?vote=down&id="+datum.id+'&user='+datum.user+"'>"+"Vote Down</a>"+"\n"+"<br><br><br><p class='report-desc'>"+datum.html+"</p><br><h5>Comments</h5>"+comments+"<br><form class='form-group' method='post' action='comment.php?id="+datum.id+'&user='+datum.user+"'><div><input class='form-control' type=text name='comment'></div><br><input class='btn btn-success btn-block' type='submit' value='Post Comment'>"
+							info: "<h4 class='report-title'>"+datum.title+"</h4><h5>Tagged at: "+datum.taggedAt+"</h5><h6>Currently voted by "+datum.votes+" people"+"\n"+"<br><br><br><p class='report-desc'>"+datum.html+"</p><br><a href='vote.php?vote=up&id="+datum.id+'&user='+datum.user+"'>"+"<i title='Vote Up' class='fa fa-thumbs-up'></i></a>"+"\n"+"&nbsp;&nbsp;&nbsp;<a href='vote.php?vote=down&id="+datum.id+'&user='+datum.user+"'>"+"<i title='Vote Down' class='fa fa-thumbs-down'></i></a><h5>Comments</h5>"+comments+"<br><form class='form-group' method='post' action='comment.php?id="+datum.id+'&user='+datum.user+"'><div><input class='form-control' type=text name='comment'></div><br><input class='btn btn-success btn-block' type='submit' value='Post Comment'>"
 						});
 					}
 					else {
@@ -365,7 +423,7 @@
 								strokeOpacity: 0.9,
 							},
 							animation: anim,
-							info: "<h4 class='report-title'>"+datum.title+"</h4><h5>Tagged at: "+datum.taggedAt+"</h5><br><h6>Currently voted by "+datum.votes+" people<br><br><a href='vote.php?vote=up&id="+datum.id+'&user='+datum.user+"'>"+"Vote Up</a>"+"\n"+"&nbsp;&nbsp;&nbsp;<a href='vote.php?vote=down&id="+datum.id+'&user='+datum.user+"'>"+"Vote Down</a>"+"\n"+"<br><br><br><p class='report-desc'>"+datum.html+"</p><br><h5>Comments</h5>"+comments+"<br><form class='form-group' method='post' action='comment.php?id="+datum.id+'&user='+datum.user+"'><div><input class='form-control' type=text name='comment'></div><br><input class='btn btn-success btn-block' type='submit' value='Post Comment'>"
+							info: "<h4 class='report-title'>"+datum.title+"</h4><h5>Tagged at: "+datum.taggedAt+"</h5><h6>Currently voted by "+datum.votes+" people"+"\n"+"<br><br><br><p class='report-desc'>"+datum.html+"</p><br><a href='vote.php?vote=up&id="+datum.id+'&user='+datum.user+"'>"+"<i title='Vote Up' class='fa fa-thumbs-up'></i></a>"+"\n"+"&nbsp;&nbsp;&nbsp;<a href='vote.php?vote=down&id="+datum.id+'&user='+datum.user+"'>"+"<i title='Vote Down' class='fa fa-thumbs-down'></i></a><h5>Comments</h5>"+comments+"<br><form class='form-group' method='post' action='comment.php?id="+datum.id+'&user='+datum.user+"'><div><input class='form-control' type=text name='comment'></div><br><input class='btn btn-success btn-block' type='submit' value='Post Comment'>"
 						});
 					}
 
@@ -498,19 +556,10 @@
 		<nav class="navbar navbar-default row">
 			<div class="container">
 				<div class="navbar-header pull-right">
-					<?php
-						if (isset($_GET["closed"])) {
-							echo '<a class="navbar-brand" href="report.php">Hide Closed Complaints</a>';
-						}
-						else {
-							echo '<a class="navbar-brand" href="report.php?closed=true">Show Closed Complaints</a>';
-						}
-					?>
-					<a class="navbar-brand" href="logout.php">Logout</a>
+					<a class="navbar-brand" href="logout.php"><i title="Logout" class="fa fa-sign-out"></i></a>
 				</div>
 			</div>
 		</nav>
-
 		<div class="container map-holder">
 			<div class="row map-holder">
 				<div class="col-md-4 complaint-form">
