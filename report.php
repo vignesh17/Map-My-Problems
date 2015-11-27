@@ -84,8 +84,7 @@
 				  // Set CSS for the control border.
 				  var controlUI = document.createElement('div');
 				  controlUI.style.backgroundColor = '#fff';
-				  controlUI.style.border = '2px solid #fff';
-				  controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+				  controlUI.style.borderLeft = '1px solid black';
 				  controlUI.style.cursor = 'pointer';
 				  controlUI.style.marginBottom = '22px';
 				  controlUI.style.marginTop = '5px';
@@ -97,7 +96,7 @@
 				  controlText.style.color = 'rgb(25,25,25)';
 				  controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
 				  controlText.style.fontSize = '11px';
-				  controlText.style.lineHeight = '13px';
+				  controlText.style.lineHeight = '18px';
 				  controlText.style.paddingLeft = '2px';
 				  controlText.style.paddingRight = '2px';
 				  controlText.innerHTML = 'Highlight Roads';
@@ -107,6 +106,7 @@
 				  controlUI.addEventListener('click', function() {
 				  	if (roadsFlag == 0) {
 				  		roadsFlag = 1;
+				  		controlText.style.fontWeight = 'bolder';
 				  		map.setOptions({
 							rotateControl: true,
 							styles: [
@@ -147,6 +147,7 @@
 				  	} 
 				  	else{
 				  		roadsFlag = 0;
+				  		controlText.style.fontWeight = 'initial';
 				  		map.setOptions({
 							rotateControl: true,
 							styles: [
@@ -208,8 +209,7 @@
 				  // Set CSS for the control border.
 				  var controlUI = document.createElement('div');
 				  controlUI.style.backgroundColor = '#fff';
-				  controlUI.style.border = '2px solid #fff';
-				  controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+				  controlUI.style.borderLeft = '1px solid black';
 				  controlUI.style.cursor = 'pointer';
 				  controlUI.style.marginBottom = '22px';
 				  controlUI.style.marginTop = '5px';
@@ -221,7 +221,7 @@
 				  controlText.style.color = 'rgb(25,25,25)';
 				  controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
 				  controlText.style.fontSize = '11px';
-				  controlText.style.lineHeight = '13px';
+				  controlText.style.lineHeight = '18px';
 				  controlText.style.paddingLeft = '2px';
 				  controlText.style.paddingRight = '2px';
 				  controlText.innerHTML = 'Live Traffic';
@@ -231,10 +231,12 @@
 				  controlUI.addEventListener('click', function() {
 				  	if (trafficFlag == 0) {
 				  		trafficFlag = 1;
+				  		controlText.style.fontWeight = 'bolder';
   						trafficLayer.setMap(map);
 				  	} 
 				  	else{
 				  		trafficFlag = 0;
+				  		controlText.style.fontWeight = 'initial';
   						trafficLayer.setMap(null);
 				  	};
 				    
@@ -257,8 +259,7 @@
 				  // Set CSS for the control border.
 				  var controlUI = document.createElement('div');
 				  controlUI.style.backgroundColor = '#fff';
-				  controlUI.style.border = '2px solid #fff';
-				  controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+				  controlUI.style.borderLeft = '1px solid black';
 				  controlUI.style.cursor = 'pointer';
 				  controlUI.style.marginBottom = '22px';
 				  controlUI.style.marginTop = '5px';
@@ -270,15 +271,21 @@
 				  controlText.style.color = 'rgb(25,25,25)';
 				  controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
 				  controlText.style.fontSize = '11px';
-				  controlText.style.lineHeight = '13px';
+				  controlText.style.lineHeight = '18px';
 				  controlText.style.paddingLeft = '2px';
 				  controlText.style.paddingRight = '2px';
+				  if (sessionStorage.closed == 1) {
+				  	controlText.style.fontWeight = 'bolder';
+				  }
+				  else {
+				  	controlText.style.fontWeight = 'initial';
+				  }
 				  controlText.innerHTML = 'Toggle Closed Complaints';
 				  controlUI.appendChild(controlText);
 
 				  // Setup the click event listeners
 				  controlUI.addEventListener('click', function() {
-				  	if(sessionStorage.closed) {
+				  	if (sessionStorage.closed) {
 				  		if (sessionStorage.closed == 0) {
 					  		sessionStorage.closed = 1;
 					  		window.location = 'report.php?closed=true';
@@ -290,6 +297,7 @@
 				  	}
 				  	else {
 				  		sessionStorage.closed = 1;
+				  		controlText.style.fontWeight = 'bolder';
 					  	window.location = 'report.php?closed=true';
 				  	}
 				  	
