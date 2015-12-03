@@ -1,0 +1,17 @@
+.map-holder {
+	height: 94%;
+    margin-top: -25px;
+    margin-right: -7px;
+    width: 102%;
+}
+
+.map-pane {
+    width: 85%;
+    margin-left: 175px;
+    margin-top: -175px;
+}
+
+.col-md-4.legends {
+    margin-top: 100px;
+    color: white;
+}
