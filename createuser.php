@@ -49,7 +49,7 @@
 			$alreadyExists = (($collection -> count(array('username' => $username))) + ($collection -> count(array('email' => $email))));
 			if(!$alreadyExists) {
 				$code = (string)crc32($email);
-				$user = array('name' => $name, 'username' => $username, 'pass' => $hashpass, 'email' => $email, 'active' => 0, 'verify' => $code, "constituency" => $const);
+				$user = array('admin' => 0, 'name' => $name, 'username' => $username, 'pass' => $hashpass, 'email' => $email, 'active' => 0, 'verify' => $code, "constituency" => $const);
 				$collection -> insert($user);
 				$file = fopen("password.txt", "r") or die("Password not found");
 				$mail = new PHPMailer();

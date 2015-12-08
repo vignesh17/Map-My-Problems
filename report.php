@@ -5,14 +5,16 @@
 		header('Location:login.php');
 	}
 ?>
+
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+		<meta charset="utf-8">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 		<link rel="stylesheet" type="text/css" href="css/styles.css">
-		<meta charset="utf-8">
 		<title>Map My Problems</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.2.43/jquery.form-validator.min.js"></script>
@@ -20,24 +22,34 @@
 		<script src="js/markerclusterer.js" type="text/javascript"></script>
 		<script type="text/javascript" src="js/spider.js"></script>
 		<script>
-
-
+			//coords stores the {lat, lng} of the autocomplete field
+			//globalMarkers contains all the map markers
 			var coords = [];
 			var globalMarkers = [];
 
 			window.onload = function() {
 
+				//handle loading progress
+				$('#finished-load').css({
+					visibility 	: 'visible',
+					height 		: 'initial'
+				});
+				$('#page-loading').remove();
+
 				//Autocomplete field
 				var input = document.getElementById('pac-input');
 				
 				//Map Styles
-				var gm = google.maps;
-				var chennai = {lat: 13.0846, lng: 80.2179};
+				var gm 	= google.maps;
+				var chennai = {
+					lat: 13.0846, 
+					lng: 80.2179
+				};
 				var map = new gm.Map(document.getElementById('map'), {
-					zoom: 12,
-					center: chennai,
-					rotateControl: true,
-					styles: [
+					zoom			: 12,
+					center 			: chennai,
+					rotateControl	: true,
+					styles 			: [
 						{"featureType":"all","elementType":"labels.text.fill",
 							"stylers":[{"saturation":36},{"color":"#000000"},{"lightness":40}]},
 						{"featureType":"all","elementType":"labels.text.stroke","stylers":[
@@ -73,14 +85,11 @@
 					]
 				});
 
-				//custom map controls
+				//beginning of custom map controls
 
 				//Roads
 				var roadsFlag = 0;
-
 				function CenterControlRoads(controlDiv, map) {
-
-				  
 				  // Set CSS for the control border.
 				  var controlUI = document.createElement('div');
 				  controlUI.style.backgroundColor = '#fff';
@@ -104,12 +113,13 @@
 
 				  // Setup the click event listeners
 				  controlUI.addEventListener('click', function() {
+				  	//roadsFlag checks if the toggle is already set
 				  	if (roadsFlag == 0) {
 				  		roadsFlag = 1;
 				  		controlText.style.fontWeight = 'bolder';
 				  		map.setOptions({
-							rotateControl: true,
-							styles: [
+							rotateControl 	: true,
+							styles 			: [
 								{"featureType":"all","elementType":"labels.text.fill",
 							"stylers":[{"saturation":36},{"color":"#000000"},{"lightness":40}]},
 							{"featureType":"all","elementType":"labels.text.stroke","stylers":[
@@ -149,8 +159,8 @@
 				  		roadsFlag = 0;
 				  		controlText.style.fontWeight = 'initial';
 				  		map.setOptions({
-							rotateControl: true,
-							styles: [
+							rotateControl 	: true,
+							styles 			: [
 								{"featureType":"all","elementType":"labels.text.fill",
 									"stylers":[{"saturation":36},{"color":"#000000"},{"lightness":40}]},
 								{"featureType":"all","elementType":"labels.text.stroke","stylers":[
@@ -191,8 +201,8 @@
 
 				}
 
-				// Create the DIV to hold the control and call the CenterControl() constructor
-				// passing in this DIV.
+				// Create a div to hold the control, call the CenterControl() constructor
+				// and add it to the map
 				var centerControlDivRoads = document.createElement('div');
 				var centerControlRoads = new CenterControlRoads(centerControlDivRoads, map);
 
@@ -203,9 +213,7 @@
 				var trafficFlag = 0;
 				var trafficLayer = new google.maps.TrafficLayer();
 
-				function CenterControlTraffic(controlDiv, map) {
-
-				  
+				function CenterControlTraffic(controlDiv, map) {				  
 				  // Set CSS for the control border.
 				  var controlUI = document.createElement('div');
 				  controlUI.style.backgroundColor = '#fff';
@@ -234,7 +242,7 @@
 				  		controlText.style.fontWeight = 'bolder';
   						trafficLayer.setMap(map);
 				  	} 
-				  	else{
+				  	else {
 				  		trafficFlag = 0;
 				  		controlText.style.fontWeight = 'initial';
   						trafficLayer.setMap(null);
@@ -253,9 +261,7 @@
 
 				//Closed Complaints
 
-				function CenterControlClosed(controlDiv, map) {
-
-				  
+				function CenterControlClosed(controlDiv, map) {				  
 				  // Set CSS for the control border.
 				  var controlUI = document.createElement('div');
 				  controlUI.style.backgroundColor = '#fff';
@@ -312,13 +318,18 @@
 				centerControlDivClosed.index = 1;
 				map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDivClosed);
 
-				
+				//end of custom map controls
+
 				//Initialise infowindows and OMS
 				var iw = new gm.InfoWindow();
-				var oms = new OverlappingMarkerSpiderfier(map,
-					{markersWontMove: true, markersWontHide: true});
+				var oms = new OverlappingMarkerSpiderfier(
+					map, {
+						markersWontMove: true, 
+						markersWontHide: true
+					}
+				);
 
-				//Convert location to coordinates
+				//Convert location to coordinates - google autocomplete
 				var autocomplete = new google.maps.places.Autocomplete(input);
 				autocomplete.bindTo('bounds', map);
 				autocomplete.addListener('place_changed', function() {
@@ -336,24 +347,25 @@
 				});
 
 				//OMS Spiderfy markers
+				//also check if the votes are more than the cutoff
 				oms.addListener('spiderfy', function(markers) {
 					for(var i = 0; i < markers.length; i ++) {
 						if (markers[i].iconBig == true) {
 							markers[i].setIcon({
-								path: google.maps.SymbolPath.CIRCLE,
-								strokeColor: markers[i].markerColorTemp,
-								scale: 8,
-								strokeWeight: 16,
-								strokeOpacity: 0.9
+								path 			: google.maps.SymbolPath.CIRCLE,
+								strokeColor 	: markers[i].markerColorTemp,
+								scale 			: 8,
+								strokeWeight 	: 16,
+								strokeOpacity 	: 0.9
 							});
 						}
 						else {
 							markers[i].setIcon({
-								path: google.maps.SymbolPath.CIRCLE,
-								strokeColor: markers[i].markerColorTemp,
-								scale: 4,
-								strokeWeight: 8,
-								strokeOpacity: 0.9
+								path 			: google.maps.SymbolPath.CIRCLE,
+								strokeColor 	: markers[i].markerColorTemp,
+								scale 			: 4,
+								strokeWeight 	: 8,
+								strokeOpacity 	: 0.9
 							});
 						}
 					} 
@@ -364,16 +376,17 @@
 				oms.addListener('unspiderfy', function(markers) {
 					for(var i = 0; i < markers.length; i ++) {
 						markers[i].setIcon({
-							path: google.maps.SymbolPath.CIRCLE,
-							strokeColor: markers[i].markerColorTemp,
-							scale: 4,
-							strokeWeight: 8,
-							strokeOpacity: 0.9
+							path 			: google.maps.SymbolPath.CIRCLE,
+							strokeColor 	: markers[i].markerColorTemp,
+							scale 			: 4,
+							strokeWeight 	: 8,
+							strokeOpacity 	: 0.9
 						});
 						markers[i].setAnimation(markers[i].getAnimation());
 					}
 				});
 				
+				//create comments innerHTML
 				var bounds = new gm.LatLngBounds();
 
 				for (var i = 0; i < window.mapData.length; i ++) {
@@ -388,67 +401,95 @@
 					if(datum.comments.length > 0) {
 						comments = "<ul>";
 						for (var iterator = datum.comments.length - 1; iterator >= 0; iterator--) {
-							if(1) {
-								comments = comments + "<li>"+datum.comments[iterator]+"&nbsp;<strong>Posted By "+datum.commenters[iterator]+"</strong></li>";
-							}
+							//check if the commenter is an admin and add official label to him.
+								if (datum.commenters[iterator].endsWith('~admin')) {
+									comments = comments + 
+										"<li><strong>" + 
+										datum.commenters[iterator].replace('~admin', '') + 
+										"<div class='label label-info'>Official</div>:</strong>&nbsp;" + 
+										datum.comments[iterator] + "</li>";
+								} 
+								else {
+									comments = comments + 
+										"<li><strong>" + 
+										datum.commenters[iterator] + 
+										":</strong>&nbsp; " + datum.comments[iterator] + "</li>";	
+								}
 						}
 						comments += "</ul>";
 					}
 					
+					//display bigger markers for complaints with more votes
 					var voteCutOff = 100;
+					var infoBuilder = "<h4 class='report-title'>" + 
+						datum.title + "</h4><h5>Tagged at: " + datum.taggedAt + 
+						"</h5>Posted on: " + datum.date + "<h6>Currently voted by " + 
+						datum.votes + " people" + "\n" + 
+						"<br><br><br><p class='report-desc'>" + datum.html + 
+						"</p><br><a href='vote.php?vote=up&id=" + datum.id + 
+						'&user=' + datum.user + "'>" + 
+						"<i title='Vote Up' class='fa fa-thumbs-up'></i></a>" + 
+						"\n" + "&nbsp;&nbsp;&nbsp;<a href='vote.php?vote=down&id=" + 
+						datum.id + '&user=' + datum.user + "'>" + 
+						"<i title='Vote Down' class='fa fa-thumbs-down'></i></a><h5>Comments</h5>" + 
+						comments + "<br><form class='form-group' method='post' action='comment.php?id=" +
+						datum.id + '&user=' + datum.user + "'><div>" + 
+						"<input class='form-control' type=text name='comment'></div><br>" + 
+						"<input class='btn btn-success btn-block' type='submit' value='Post Comment'>";
 					if (datum.votes < voteCutOff) {
 						var marker = new gm.Marker({
-							position: loc,
-							map: map,
-							id: markerId,
-							markerColorTemp: markerColor,
-							iconBig: false,
-							//icon: iconWithColor(markerColor),
-							icon: {
-								path: google.maps.SymbolPath.CIRCLE,
-								strokeColor: markerColor,
-								scale: 4,
-								strokeWeight: 8,
-								strokeOpacity: 0.9,
+							position 			: loc,
+							map 				: map,
+							id 					: markerId,
+							markerColorTemp 	: markerColor,
+							iconBig 			: false,
+							icon 				: {
+								path 			: google.maps.SymbolPath.CIRCLE,
+								strokeColor 	: markerColor,
+								scale 			: 4,
+								strokeWeight 	: 8,
+								strokeOpacity 	: 0.9,
 							},
-							animation: anim,
-							info: "<h4 class='report-title'>"+datum.title+"</h4><h5>Tagged at: "+datum.taggedAt+"</h5><h6>Currently voted by "+datum.votes+" people"+"\n"+"<br><br><br><p class='report-desc'>"+datum.html+"</p><br><a href='vote.php?vote=up&id="+datum.id+'&user='+datum.user+"'>"+"<i title='Vote Up' class='fa fa-thumbs-up'></i></a>"+"\n"+"&nbsp;&nbsp;&nbsp;<a href='vote.php?vote=down&id="+datum.id+'&user='+datum.user+"'>"+"<i title='Vote Down' class='fa fa-thumbs-down'></i></a><h5>Comments</h5>"+comments+"<br><form class='form-group' method='post' action='comment.php?id="+datum.id+'&user='+datum.user+"'><div><input class='form-control' type=text name='comment'></div><br><input class='btn btn-success btn-block' type='submit' value='Post Comment'>"
+							animation 			: anim,
+							info 				: infoBuilder
 						});
 					}
 					else {
 						var marker = new gm.Marker({
-							position: loc,
-							map: map,
-							id: markerId,
-							markerColorTemp: markerColor,
-							iconBig: true,
-							//icon: iconWithColor(markerColor),
-							icon: {
-								path: google.maps.SymbolPath.CIRCLE,
-								strokeColor: markerColor,
-								scale: 8,
-								strokeWeight: 16,
-								strokeOpacity: 0.9,
+							position 			: loc,
+							map 				: map,
+							id 					: markerId,
+							markerColorTemp 	: markerColor,
+							iconBig 			: true,
+							icon 				: {
+								path 			: google.maps.SymbolPath.CIRCLE,
+								strokeColor 	: markerColor,
+								scale 			: 8,
+								strokeWeight 	: 16,
+								strokeOpacity 	: 0.9,
 							},
-							animation: anim,
-							info: "<h4 class='report-title'>"+datum.title+"</h4><h5>Tagged at: "+datum.taggedAt+"</h5><h6>Currently voted by "+datum.votes+" people"+"\n"+"<br><br><br><p class='report-desc'>"+datum.html+"</p><br><a href='vote.php?vote=up&id="+datum.id+'&user='+datum.user+"'>"+"<i title='Vote Up' class='fa fa-thumbs-up'></i></a>"+"\n"+"&nbsp;&nbsp;&nbsp;<a href='vote.php?vote=down&id="+datum.id+'&user='+datum.user+"'>"+"<i title='Vote Down' class='fa fa-thumbs-down'></i></a><h5>Comments</h5>"+comments+"<br><form class='form-group' method='post' action='comment.php?id="+datum.id+'&user='+datum.user+"'><div><input class='form-control' type=text name='comment'></div><br><input class='btn btn-success btn-block' type='submit' value='Post Comment'>"
+							animation 			: anim,
+							info 				: infoBuilder
 						});
 					}
 
 					marker.title = datum.title;
 					oms.addMarker(marker);
 					globalMarkers.push(marker);
-					comments = "";
 				}
+
+				//set map bounds and load the map and oms
 				map.fitBounds(bounds);
-				
 				window.map = map;
 				window.oms = oms;
 
+				//set markerClusterer on the map.
 				var markerClusterer = new MarkerClusterer(window.map, globalMarkers);
 				markerClusterer.setMaxZoom(13);
 
 				<?php
+
+					//handle already voted upon scenarios
 					if (isset($_SESSION["voteError"])) {
 						if ($_SESSION["voteError"] == 1) {
 							echo "window.alert('You have already upvoted this.');";
@@ -459,72 +500,85 @@
 							unset($_SESSION["voteError"]);
 						}            
 					}
+
+					//open the infowindow after voting redirects
 					if (isset($_SESSION["votedId"])) {
 						echo 'var availMarkers = oms.getMarkers();';
 						echo 'var toBeOpened = $.grep(availMarkers, function(e){ return e.id == "' . $_SESSION["votedId"] . '"; })[0];';
-						echo 'console.log(toBeOpened);';
 						echo 'iw.setContent(toBeOpened.info);';
 						echo 'iw.setOptions({maxWidth: 500});';
 						echo 'iw.open(map, toBeOpened);';
+						unset($_SESSION["votedId"]);
 					}
-					if (isset($_SESSION["votedId"])) {
+
+					//open the infowindow after comment redirects
+					if (isset($_SESSION["commentId"])) {
 						echo 'var availMarkers = oms.getMarkers();';
-						echo 'var toBeOpened = $.grep(availMarkers, function(e){ return e.id == "' . $_SESSION["votedId"] . '"; })[0];';
-						echo 'console.log(toBeOpened);';
+						echo 'var toBeOpened = $.grep(availMarkers, function(e){ return e.id == "' . $_SESSION["commentId"] . '"; })[0];';
 						echo 'iw.setContent(toBeOpened.info);';
 						echo 'iw.setOptions({maxWidth: 500});';
 						echo 'iw.open(map, toBeOpened);';
+						unset($_SESSION["commentId"]);
 					}
 				?>
 
+				//create new complaint
 				$(function() {
-
 					$("#submit-button").click(function() {
-
 						var title = $("#title").val();
 						var description = $("#description").val();
 						var location = $("#pac-input").val();
 						var taggedAt = $("#taggedAt").val();
-						var dataString = {'title': title, 'description': description, 'location': location, 'coords': coords, 'taggedAt': taggedAt};
-						if(coords.length == 0) {
-									document.getElementById('insert-successful').innerHTML = 'Invalid Location';
+						//dataString is the $_POST[] var.
+						var dataString = {
+							'title' 		: title, 
+							'description' 	: description, 
+							'location' 		: location, 
+							'coords' 		: coords, 
+							'taggedAt' 		: taggedAt
+						};
+						//geocoding was not possible.
+						if (coords.length == 0) {
+							$('#insert-successful').html('Invalid Location');
 						}
-
 						else {
-
 							$.ajax({
-
-								type: "POST",
-								url: "createcomplaint.php",
-								data: dataString,
-								cache: true,
-								success: function (html) {
-
-									document.getElementById('title').value = '';
-									document.getElementById('description').value = '';
-									document.getElementById('pac-input').value = '';
-
+								type 		: "POST",
+								url 		: "createcomplaint.php",
+								data 		: dataString,
+								cache 		: true,
+								success 	: function (html) {
+									//clear input fields
+									$('#title').val('');
+									$('#description').val('');
+									$('#pac-input').val('');
+									//extend map bounds to include the new coords
 									var loc = new google.maps.LatLng(coords[0], coords[1]);
 									bounds.extend(loc);
+									//add new marker for the sake of indicating creation
+									var infoBuilder = "<h4 class='report-title'>" + 
+										title + "</h4>\n" + "<h5>Tagged at: " + taggedAt +
+										"</h5><br><p class='report-desc'>" + description +
+										"</p>";
 									var marker = new google.maps.Marker({
-										position: loc,
-										map: map,
-										icon: {
-											path: google.maps.SymbolPath.CIRCLE,
-											strokeColor: '#F7D0C9',
-											scale: 4,
-											strokeWeight: 8,
+										position 		 : loc,
+										map 			 : map,
+										icon 			 : {
+											path 		 : google.maps.SymbolPath.CIRCLE,
+											strokeColor	 : '#F7D0C9',
+											scale 		 : 4,
+											strokeWeight : 8,
 											strokeOpacity: 0.9
 										},
-										animation: 'google.maps.Animation.DROP',
-										info: "<h4 class='report-title'>"+title+"</h4>\n"+"<h5>Tagged at: "+taggedAt+"</h5><br><p class='report-desc'>"+description+"</p>"
+										animation 		 : 'google.maps.Animation.DROP',
+										info 			 : infoBuilder
 									});
 
 									oms.addMarker(marker);  
 									iw.setContent(marker.info);
 									iw.setOptions({maxWidth: 500});
 									iw.open(map, marker);
-									document.getElementById('insert-successful').innerHTML = 'Report created successfully.';
+									$('#insert-successful').html('Report created successfully.');
 
 								},
 								'error': function(jqXHR, textStatus, errorThrown) {
@@ -542,36 +596,66 @@
 
 			//Close Complaint
 			function closeComplaint(complaintId) {
+				var confirm = window.confirm("Do you want to close your complaint?");
+				if (confirm) {
 					$.ajax({
-
-								type: "GET",
-								url: "close.php?id=" + complaintId,
-								cache: true,
-								success: function (html) {
-									$("p#"+complaintId).remove();
-									var availMarkers = oms.getMarkers();
-									var toBeDeleted = $.grep(availMarkers, function(e){ return e.id == complaintId; })[0];
-									toBeDeleted.setMap(null);
-									window.alert("Your complaint has been closed successfully");
-								}
-							});
-				}
-
+						type 	: "GET",
+						url 	: "close.php?id=" + complaintId,
+						cache 	: true,
+						success : function (html) {
+							$("#label-"+complaintId).attr('class', 'complaint-label label label-danger');
+							$("#label-"+complaintId).html("closed");
+							var availMarkers = oms.getMarkers();
+							var toBeDeleted = $.grep(availMarkers, function(e){ return e.id == complaintId; })[0];
+							toBeDeleted.setMap(null);
+							window.alert("Your complaint has been closed successfully");
+						}
+					});
+				};
+			}
 		</script>
 	</head> 
-	<body class="main-page">
 
+	<body class="main-page">
+		<!--begin navbar-->
 		<nav class="navbar navbar-default row">
 			<div class="container">
+				<div class="navbar-header pull-left">
+					<?php
+						echo 'Welcome ' . $_SESSION['fullname'];
+					?>
+				</div>
 				<div class="navbar-header pull-right">
 					<a class="navbar-brand" href="logout.php"><i title="Logout" class="fa fa-sign-out"></i></a>
 				</div>
 			</div>
 		</nav>
-		<div class="container map-holder">
+		<!--end navbar-->
+		<!--begin loader-->
+		<div class="loading" id="page-loading">
+			<i class="fa fa-gear fa-spin spin1"></i>
+			<i class="fa fa-gear fa-spin spin2"></i>
+			<i class="fa fa-gear fa-spin spin3"></i>
+		</div>
+		<!-- end loader-->
+		<!--begin screen container-->
+		<div class="container map-holder" id="finished-load">
 			<div class="row map-holder">
-				<div class="col-md-4 complaint-form">
-					<form action="" method="post" name="form">
+				<!--begin left panel-->
+				<div class="col-md-4 left-panel">
+					<!--begin option buttons-->
+					<div class="row">
+						<div class="row options-panel">
+							<div class="options">
+								<button class="btn btn-primary" id="complaints-create">New Complaint</button>
+								<button class="btn btn-primary" id="complaints-show">My Complaints</button>
+								<button class="btn btn-primary" id="trending-show">Trending in your constituency</button>
+							</div>
+						</div>
+					</div>
+					<!--end options-->
+					<!--begin creation form-->
+					<form id="new-complaint" class="complaint-form" action="" method="post" name="form">
 						<fieldset>
 							<div class="form-group">
 								<input class="form-control" data-validation="custom" data-validation-regexp="^([a-zA-Z0-9.!-\s]{10,50})$"  placeholder="Complaint Title" name="title" id="title" type="text">
@@ -585,6 +669,7 @@
 							<div class="form-group">
 									<select class="form-control" name="taggedAt" id="taggedAt">
 										<?php
+											//list of officials in the constituency of the user
 											$m = new MongoClient();
 											$db = $m -> map;
 											$collection = $db -> users;
@@ -603,116 +688,201 @@
 							<input class="btn btn-lg btn-success btn-block" id="submit-button" value="Submit">
 						</fieldset>
 					</form>
+					<!--end creation form-->
+					<!--begin div to hold success message for complaint creation-->
 					<div id="insert-successful" class="text-center">
 					</div>
-					<div class="complaints" style="color:white">
+					<!--end div to hold success message for complaint creation-->
+					<!--begin my-complaints-->
+					<div id="my-complaints" class="complaints">
 						<?php
 							$m = new MongoClient();
 							$db = $m -> map;
 							$collection = $db -> reports;
-							if($_SESSION['admin']) {
-								$cursor = $collection -> find(array("taggedAt" => $_SESSION["username"], "constituency" => $_SESSION['constituency']));
+							if ($_SESSION['admin']) {
+								$cursor = $collection -> find(
+									array(
+										"taggedAt" => $_SESSION["username"], 
+										"constituency" => $_SESSION['constituency']
+									)
+								);
 								foreach ($cursor as $doc) {
-									echo $doc["title"]."<br>";
+									echo $doc["title"] . "<br>";
 								}
 							}
 							else {
-								$cursor = $collection -> find(array("username" => $_SESSION["username"]));
+								$cursor = $collection -> find(
+									array(
+										"username" => $_SESSION["username"]
+									)
+								);
 								foreach ($cursor as $doc) {
-									if($doc["status"] == "open") {
-										echo "<p id='" .  $doc["_id"] . "'>" . $doc["title"] . "&nbsp;<a style='font-size: 14px;' href='#' onClick=closeComplaint('" . $doc["_id"] . "')" . ">Close Complaint</a><br></p>\n";
-									} 
+									if ($doc["status"] == "open") {
+										echo "
+											<div class='open-complaint' id='complaint-block-" . $doc["_id"] . "' >\n" . 
+												$doc["title"] . "\n" . 
+												"<div class='complaint-label label label-success' id='label-".$doc["_id"]."'>\n". 
+													$doc["status"] . 
+												"\n</div>\n
+												<i id='plus-". $doc["_id"] . "' onClick=openComplaint('" . $doc["_id"] . "') 
+													class='fa fa-plus' style='color: #337AB7;' title='See More'>
+												</i><br>\n" .
+												"<div class='complaint-info' id='complaint-info-". $doc["_id"] . "'>\n<br>".		
+												 	$doc["description"] . "<br><br>\n<strong>Location:&nbsp;</strong>" . 
+												 	$doc["location"] . "<br>\n<strong>Tagged at:&nbsp;</strong>" . 
+												 	$doc["taggedAt"] . "<br>\n" . 
+												    "<strong>Posted on:</strong>&nbsp;" . date('d-M-Y, H:i', $doc["time"] -> sec ) . "<br>\n
+												    <a style='font-size: 10px;' href='#' 
+														onClick=closeComplaint('" . $doc["_id"] . "')" . 
+														">\n
+														Close Complaint\n
+													</a>\n
+												</div>\n
+											</div>
+											<hr>
+											<br>\n";
+									}
+									else {
+										echo "
+											<div class='closed-complaint' id='complaint-block-" . $doc["_id"] . "' >\n" . 
+										     	$doc["title"] . "\n" . 
+											 	"<div class='complaint-label label label-danger' id='label-".$doc["_id"]."'>\n". 
+											 		$doc["status"] . 
+											 	"\n</div>\n
+												<i id='plus-". $doc["_id"] . "' onClick=openComplaint('" . $doc["_id"] . "') 
+													class='fa fa-plus' style='color: #337AB7;' title='See More'>
+												</i><br>\n" .
+											 	"<div class='complaint-info' id='complaint-info-". $doc["_id"] . "'>\n<br>".
+											 		$doc["description"] . "<br><br>\n<strong>Location:&nbsp;</strong>" . 
+											 		$doc["location"] . "<br>\n<strong>Tagged at:&nbsp;</strong>" . 
+											 		$doc["taggedAt"] . "<br>\n" . 
+											 		"<strong>Posted on:</strong>&nbsp;" . date('d-M-Y, H:i', $doc["time"] -> sec ) . "\n<br>\n
+											 	</div>\n
+											</div>\n
+											<hr>
+											<br>\n";
+									}
+											
+								};
+							}
+						?>
+					</div>
+					<!--end my-complaints-->
+					<!--begin trending-->
+					<div id="trending" class="trending-complaints">
+						<?php
+							$m = new MongoClient();
+							$db = $m -> map;
+							$collection = $db -> reports;
+							if ($_SESSION['admin']) {
+								$cursor = $collection -> find(
+									array(
+										"constituency" => $_SESSION['constituency'],
+										"status" => "open",
+										"taggedAt" => $_SESSION["username"]
+									)
+								) -> sort(
+									array(
+										"votes" => 1
+									)
+								) -> limit(5);
+								foreach ($cursor as $doc) {
+									echo "
+											<div class='trending-open-complaint' id='trending-complaint-block-" . $doc["_id"] . "' >\n" . 
+										 		$doc["title"] . "\n". 
+												"<i id='trending-plus-". $doc["_id"] . "' 
+													onClick=openTrendingComplaint('" . $doc["_id"] . "') 
+													class='fa fa-plus' style='color: #337AB7;' title='See More'>
+												</i><br>\n" .
+												"<div class='trending-complaint-info' id='trending-complaint-info-". $doc["_id"] . 
+													"'>\n<br>".		
+												 	$doc["description"] . "<br><br>\n<strong>Location:&nbsp;</strong>" . 
+												 	$doc["location"] . "<br>\n<strong>Tagged at:&nbsp;</strong>" . 
+												 	$doc["taggedAt"] . "<br>\n" . 
+												    "<strong>Posted on:</strong>&nbsp;" . 
+												    date('d-M-Y, H:i', $doc["time"] -> sec ) .
+												    "<br>\n" .
+												"</div>\n" .
+											"</div>" .
+											"<hr>" .
+											"<br>\n";
+								}
+							}
+							else {
+								$cursor = $collection -> find(
+									array(
+										"constituency" => $_SESSION['constituency']
+									)
+								) -> sort(
+									array(
+										"votes" => 1
+									)
+								) -> limit(5);
+								foreach ($cursor as $doc) {
+									if ($doc["status"] == "open") {
+										echo "
+											<div class='trending-open-complaint' id='trending-complaint-block-" . $doc["_id"] . "' >\n" . 
+										 		$doc["title"] . "\n". 
+												"<i id='trending-plus-". $doc["_id"] . "' 
+													onClick=openTrendingComplaint('" . $doc["_id"] . "') 
+													class='fa fa-plus' style='color: #337AB7;' title='See More'>
+												</i><br>\n" .
+												"<div class='trending-complaint-info' id='trending-complaint-info-". $doc["_id"] . 
+													"'>\n<br>".		
+												 	$doc["description"] . "<br><br>\n<strong>Location:&nbsp;</strong>" . 
+												 	$doc["location"] . "<br>\n<strong>Tagged at:&nbsp;</strong>" . 
+												 	$doc["taggedAt"] . "<br>\n" . 
+												    "<strong>Posted on:</strong>&nbsp;" . 
+												    date('d-M-Y, H:i', $doc["time"] -> sec ) .
+												    "<br>\n" .
+												"</div>\n" .
+											"</div>" .
+											"<hr>" .
+											"<br>\n";
+									}	
 								};
 							}
 							
-						?>
+						?>						
 					</div>
+					<!--end trending-->
 				</div>
+				<!--end left panel-->
+				<!--begin right panel-->
 				<div class="col-md-8 map-pane">
 					<div id="map"></div>
 				</div>
+				<!--end right panel-->
 			</div>
 		</div>
-
+		<!--end screen container-->
+		<!--begin mixed js-->
 		<script type="text/javascript">
+			//Fetch markers from db
+			var data = [];
+			<?php
+				$m = new MongoClient();
+				$db = $m -> map;
+				$collection = $db -> reports;
 
-		//Add markers from db
-		var data = [];
-		<?php
-
-			$m = new MongoClient();
-			$db = $m -> map;
-			$collection = $db -> reports;
-
-			if($_SESSION['admin']) {
-				$cursor = $collection -> find(array("constituency" => $_SESSION["constituency"], "taggedAt" => $_SESSION["username"]));
-			}
-			else {
-				$cursor = $collection -> find(); 
-			}
-
-			foreach ($cursor as $doc) {
-
-				if (isset($_GET["closed"])) {
-					$currentTime = new DateTime(date('Y-m-d H:i:s'));
-					$creationTime = new DateTime(date('Y-m-d H:i:s', $doc["time"] -> sec ));
-					$interval = $currentTime -> diff($creationTime);
-					$intervalInDays = intval(($interval -> format('%d')));
-					
-					if ($intervalInDays < 10) {
-						$markerColor = "#F7D0C9";
-						$animation = 'google.maps.Animation.DROP';
-					} else
-					if ($intervalInDays < 20) {
-						$markerColor = "#FC8879";
-						$animation = 'google.maps.Animation.DROP';
-					} else {
-						$markerColor = "#FF4241";
-						$animation = 'google.maps.Animation.BOUNCE';
-					} 
-
-					if ($doc["status"] == "open") {
-						echo 'data.push({
-								lon:'.$doc["coords"][1].',
-								lat: '.$doc["coords"][0].',
-								title: "'.$doc["title"] .'",
-								html: "'.$doc["description"] .'",
-								id: "'.$doc["_id"].'",
-								username: "'.$doc["username"].'",
-								user: "'.$_SESSION["username"].'",
-								votes: '.$doc["votes"].',
-								comments: ' . json_encode($doc["comments"]) . ',
-								commenters: ' . json_encode($doc["commenters"]) . ',
-								taggedAt: "' . $doc["taggedAt"] . '",
-								markerColor: "' . $markerColor . '",
-								animation: '. $animation . ',
-							});
-						';
-					}
-					else {
-						echo 'data.push({
-								lon:'.$doc["coords"][1].',
-								lat: '.$doc["coords"][0].',
-								title: "'.$doc["title"] .'",
-								html: "'.$doc["description"] .'",
-								id: "'.$doc["_id"].'",
-								username: "'.$doc["username"].'",
-								user: "'.$_SESSION["username"].'",
-								votes: '.$doc["votes"].',
-								comments: ' . json_encode($doc["comments"]) . ',
-								commenters: ' . json_encode($doc["commenters"]) . ',
-								taggedAt: "' . $doc["taggedAt"] . '",
-								markerColor: "' . '#FFEA9D' . '",
-								animation: '. 'google.maps.Animation.DROP' . ',
-							});
-						';
-						echo 'console.log(data);';
-					}
+				//  in the case of admin login, fetch only complaints in his contstituency
+				//  that are tagged at him
+				if($_SESSION['admin']) {
+					$cursor = $collection -> find(
+						array(
+							"constituency" => $_SESSION["constituency"], 
+							"taggedAt" => $_SESSION["username"]
+						)
+					);
+				}
+				else {
+					$cursor = $collection -> find(); 
 				}
 
-				else {
-
-					if ($doc["status"] == "open") {
+				foreach ($cursor as $doc) {
+					//display closed complaints also
+					if (isset($_GET["closed"])) {
+						//varying colors for markers based on number of days since posting
 						$currentTime = new DateTime(date('Y-m-d H:i:s'));
 						$creationTime = new DateTime(date('Y-m-d H:i:s', $doc["time"] -> sec ));
 						$interval = $currentTime -> diff($creationTime);
@@ -721,56 +891,121 @@
 						if ($intervalInDays < 10) {
 							$markerColor = "#F7D0C9";
 							$animation = 'google.maps.Animation.DROP';
-						} else
-						if ($intervalInDays < 20) {
+						} 
+						else if ($intervalInDays < 20) {
 							$markerColor = "#FC8879";
 							$animation = 'google.maps.Animation.DROP';
-						} else {
+						} 
+						else {
 							$markerColor = "#FF4241";
 							$animation = 'google.maps.Animation.BOUNCE';
 						} 
 
-						echo 'data.push({
-								lon:'.$doc["coords"][1].',
-								lat: '.$doc["coords"][0].',
-								title: "'.$doc["title"] .'",
-								html: "'.$doc["description"] .'",
-								id: "'.$doc["_id"].'",
-								username: "'.$doc["username"].'",
-								user: "'.$_SESSION["username"].'",
-								votes: '.$doc["votes"].',
-								comments: ' . json_encode($doc["comments"]) . ',
-								commenters: ' . json_encode($doc["commenters"]) . ',
-								taggedAt: "' . $doc["taggedAt"] . '",
-								markerColor: "' . $markerColor . '",
-								animation: '. $animation . ',
-							});
-						';
+						//  assign markerColor to open complaints
+						//  and closed color to closed complaints 
+						if ($doc["status"] == "open") {
+							echo 'data.push({
+									lon:'.$doc["coords"][1].',
+									lat: '.$doc["coords"][0].',
+									title: "'.$doc["title"] .'",
+									html: "'.$doc["description"] .'",
+									id: "'.$doc["_id"].'",
+									username: "'.$doc["username"].'",
+									user: "'.$_SESSION["username"].'",
+									votes: '.$doc["votes"].',
+									comments: ' . json_encode($doc["comments"]) . ',
+									commenters: ' . json_encode($doc["commenters"]) . ',
+									taggedAt: "' . $doc["taggedAt"] . '",
+									markerColor: "' . $markerColor . '",
+									animation: '. $animation . ',
+									date: "' . date('d-M-Y, H:i', $doc["time"] -> sec ) . '",
+								});
+							';
+						}
+						else {
+							echo 'data.push({
+									lon:'.$doc["coords"][1].',
+									lat: '.$doc["coords"][0].',
+									title: "'.$doc["title"] .'",
+									html: "'.$doc["description"] .'",
+									id: "'.$doc["_id"].'",
+									username: "'.$doc["username"].'",
+									user: "'.$_SESSION["username"].'",
+									votes: '.$doc["votes"].',
+									comments: ' . json_encode($doc["comments"]) . ',
+									commenters: ' . json_encode($doc["commenters"]) . ',
+									taggedAt: "' . $doc["taggedAt"] . '",
+									markerColor: "' . '#FFEA9D' . '",
+									animation: '. 'google.maps.Animation.DROP' . ',
+									date: "' . date('d-M-Y, H:i', $doc["time"] -> sec ) . '",
+								});
+							';
+						}
 					}
-				
+
+					else {
+						//display only open complaints
+						if ($doc["status"] == "open") {
+							//varying colors for markers based on number of days since posting
+							$currentTime = new DateTime(date('Y-m-d H:i:s'));
+							$creationTime = new DateTime(date('Y-m-d H:i:s', $doc["time"] -> sec ));
+							$interval = $currentTime -> diff($creationTime);
+							$intervalInDays = intval(($interval -> format('%d')));
+							if ($intervalInDays < 10) {
+								$markerColor = "#F7D0C9";
+								$animation = 'google.maps.Animation.DROP';
+							} 
+							else if ($intervalInDays < 20) {
+								$markerColor = "#FC8879";
+								$animation = 'google.maps.Animation.DROP';
+							} 
+							else {
+								$markerColor = "#FF4241";
+								$animation = 'google.maps.Animation.BOUNCE';
+							} 
+							echo 'data.push({
+									lon:'.$doc["coords"][1].',
+									lat: '.$doc["coords"][0].',
+									title: "'.$doc["title"] .'",
+									html: "'.$doc["description"] .'",
+									id: "'.$doc["_id"].'",
+									username: "'.$doc["username"].'",
+									user: "'.$_SESSION["username"].'",
+									votes: '.$doc["votes"].',
+									comments: ' . json_encode($doc["comments"]) . ',
+									commenters: ' . json_encode($doc["commenters"]) . ',
+									taggedAt: "' . $doc["taggedAt"] . '",
+									markerColor: "' . $markerColor . '",
+									animation: '. $animation . ',
+									date: "' . date('d-M-Y, H:i', $doc["time"] -> sec ) . '",
+								});
+							';
+						}
+					
+					}
+					
 				}
-				
-			}
-		?>
-		window.mapData = data;
-
-		
+			?>
+			//assign the fetch db data to the map
+			window.mapData = data;
 		</script>
-
-		
-
+		<!--end mixed js-->
+		<!--begin only JS-->
+		<script type="text/javascript" src="js/script.js"></script>
+		<!--end only JS-->
+		<!--begin form validation-->
 		<script> 
 				$.validate(); 
 				$.formUtils.addValidator({
-					name : 'normaltext',
-					validatorFunction : function(value, $el, config, language, $form) {
+					name 				: 'normaltext',
+					validatorFunction 	: function(value, $el, config, language, $form) {
 						return /^[\.\-\/\\1-9a-z\s]+$/i.test(value);
 					},
-					errorMessage : 'Invalid characters present in the entered text.',
-					errorMessageKey: 'onlyLetters'
+					errorMessage 		: 'Invalid characters present in the entered text.',
+					errorMessageKey 	: 'onlyLetters'
 				});
 		</script>
-		 
-
+		<!--end form validation-->
 	</body>
+
 </html>

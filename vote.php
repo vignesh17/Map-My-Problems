@@ -1,4 +1,24 @@
 <?php
+	// Vote up:
+	// if not in both arrays,
+	// 		add in array 
+	//		increment vote
+	// if in upvoted
+	// 		error
+	// if in downvoted
+	// 		remove in downvoted
+	// 		increase vote
+
+
+	// vote down:
+	// if not in both arrays,
+	// 		add in array 
+	// 		decrement vote
+	// if in downvoted
+	//		error
+	// if in upvoted
+	// 		remove in upvoted
+	// 		decrease vote
 	ob_start();
 	session_start();
 	if(isset($_SESSION['username'])) {
