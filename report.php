@@ -705,6 +705,10 @@
 										"taggedAt" => $_SESSION["username"], 
 										"constituency" => $_SESSION['constituency']
 									)
+								) -> sort (
+									array(
+										"status" => 1
+									)
 								);
 								foreach ($cursor as $doc) {
 									echo $doc["title"] . "<br>";
@@ -714,6 +718,10 @@
 								$cursor = $collection -> find(
 									array(
 										"username" => $_SESSION["username"]
+									) 
+								) -> sort (
+									array(
+										"status" => -1
 									)
 								);
 								foreach ($cursor as $doc) {
