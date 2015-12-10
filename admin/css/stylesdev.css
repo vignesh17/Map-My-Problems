@@ -1,0 +1,132 @@
+body {
+	background-color: #E8E9ED;
+}
+.user-panel {
+    color: #2f2f2f;
+    font-size: 20px;
+    margin-top: 15px;
+}
+
+.map-pane {
+	background-color: white;
+    height: 92.75vh;
+}
+
+.left-panel {
+	border-right: #e7e7e7 1px solid;
+    margin-top: 15px;
+}
+
+.complaints {
+	color: #2f2f2f;
+	visibility: hidden;
+	height: 0;
+    word-wrap: break-word;
+    font-size: 14px;
+    overflow-x: auto;
+}
+
+.trending-complaints {
+    color: #2f2f2f;
+    visibility: hidden;
+    height: 0;
+    word-wrap: break-word;
+    font-size: 14px;
+    overflow-x: auto;
+}
+
+nav.navbar.navbar-default.row {
+    background: #2c3338;
+    border: none;
+}
+
+.main-page {
+	background-color: #E8E9ED;
+}
+
+.navbar-header.pull-left {
+    color: white;
+    font-size: 18px;
+    margin-top: 1%;
+    margin-left: 6%;
+}
+
+.row.options-panel {
+    height: 50px;
+    margin-left: -76%;
+}
+
+.options {
+    float: right;
+    margin-top: 8px;
+    margin-right: 30px;
+}
+
+.complaint-form {
+	height: 0;
+	visibility: hidden;
+}
+
+.complaint-info, .trending-complaint-info {
+    visibility: hidden;
+    height: 0;
+}
+
+.complaint-label {
+    float: right;
+    margin-right: 10px;
+}
+
+.fa-plus {
+    float: right;
+    margin-right: 10px;
+}
+
+.fa-minus {
+    float: right;
+    margin-right: 10px;
+}
+
+hr {
+    margin-top: 10px;
+    margin-bottom: -10px;
+    border: 0;
+    border-top: 1px solid #c2c2c2;
+}
+
+#finished-load {
+    visibility: hidden;
+    height: 0;
+}
+
+.loading {
+    position: relative;
+    margin-top: 18%;
+    margin-left: 48%;
+    font-size: 90px;
+}
+
+i.fa.fa-gear.fa-spin {
+    animation-duration: 5s;
+}
+
+i.fa.fa-gear.fa-spin.spin1 {
+    margin-left: -20%;
+    margin-right: -41px;
+    animation-timing-function: steps;
+}
+
+.spin2 {
+    animation-direction: reverse;
+}
+
+i.fa.fa-gear.fa-spin.spin2 {
+    font-size: 125px;
+    margin-left: 9px;
+}
+
+i.fa.fa-gear.fa-spin.spin3 {
+    margin-left: -39px;
+    font-size: 178px;
+}
+
