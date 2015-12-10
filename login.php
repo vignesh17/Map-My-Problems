@@ -51,7 +51,6 @@
                                 <ul class="login-helper">
                                     <li class="login-helper-content"><a href="forgot.php">Forgot Password?</a></li>
                                     <li class="login-helper-content"><a href="signup.php">Sign Up</a></li>
-                                    <li class="login-helper-content"><a href="adminlogin.php">Admin login</a></li>
                                 </ul>
                             </div>
                             <div class="form-group text-center" id="spam-error" style="visibility:hidden;height:0;">
