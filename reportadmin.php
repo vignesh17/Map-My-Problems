@@ -36,8 +36,6 @@
 				});
 				$('#page-loading').remove();
 
-				//Autocomplete field
-				var input = document.getElementById('pac-input');
 				
 				//Map Styles
 				var gm 	= google.maps;
@@ -329,16 +327,6 @@
 					}
 				);
 
-				//Convert location to coordinates - google autocomplete
-				var autocomplete = new google.maps.places.Autocomplete(input);
-				autocomplete.bindTo('bounds', map);
-				autocomplete.addListener('place_changed', function() {
-					var place = autocomplete.getPlace();
-					coords = [];
-					coords.push(place.geometry.location.lat());
-					coords.push(place.geometry.location.lng());
-				})
-
 				//OMS Open infowindow on click
 				oms.addListener('click', function(marker) {
 					iw.setContent(marker.info);
@@ -402,19 +390,19 @@
 						comments = "<ul>";
 						for (var iterator = datum.comments.length - 1; iterator >= 0; iterator--) {
 							//check if the commenter is an admin and add official label to him.
-							if (datum.commenters[iterator].endsWith('~admin')) {
-								comments = comments + 
-									"<li><strong>" + 
-									datum.commenters[iterator].replace('~admin', '') + 
-									"<div class='label label-info'>Official</div>:</strong>&nbsp;" + 
-									datum.comments[iterator] + "</li>";
-							} 
-							else {
-								comments = comments + 
-									"<li><strong>" + 
-									datum.commenters[iterator] + 
-									":</strong>&nbsp; " + datum.comments[iterator] + "</li>";	
-							}
+								if (datum.commenters[iterator].endsWith('~admin')) {
+									comments = comments + 
+										"<li><strong>" + 
+										datum.commenters[iterator].replace('~admin', '') + 
+										"<div class='label label-info'>Official</div>:</strong>&nbsp;" + 
+										datum.comments[iterator] + "</li>";
+								} 
+								else {
+									comments = comments + 
+										"<li><strong>" + 
+										datum.commenters[iterator] + 
+										":</strong>&nbsp; " + datum.comments[iterator] + "</li>";	
+								}
 						}
 						comments += "</ul>";
 					}
@@ -522,97 +510,9 @@
 					}
 				?>
 
-				//create new complaint
-				$(function() {
-					$("#submit-button").click(function() {
-						var title = $("#title").val();
-						var description = $("#description").val();
-						var location = $("#pac-input").val();
-						var taggedAt = $("#taggedAt").val();
-						//dataString is the $_POST[] var.
-						var dataString = {
-							'title' 		: title, 
-							'description' 	: description, 
-							'location' 		: location, 
-							'coords' 		: coords, 
-							'taggedAt' 		: taggedAt
-						};
-						//geocoding was not possible.
-						if (coords.length == 0) {
-							$('#insert-successful').html('Invalid Location');
-						}
-						else {
-							$.ajax({
-								type 		: "POST",
-								url 		: "createcomplaint.php",
-								data 		: dataString,
-								cache 		: true,
-								success 	: function (html) {
-									//clear input fields
-									$('#title').val('');
-									$('#description').val('');
-									$('#pac-input').val('');
-									//extend map bounds to include the new coords
-									var loc = new google.maps.LatLng(coords[0], coords[1]);
-									bounds.extend(loc);
-									//add new marker for the sake of indicating creation
-									var infoBuilder = "<h4 class='report-title'>" + 
-										title + "</h4>\n" + "<h5>Tagged at: " + taggedAt +
-										"</h5><br><p class='report-desc'>" + description +
-										"</p>";
-									var marker = new google.maps.Marker({
-										position 		 : loc,
-										map 			 : map,
-										icon 			 : {
-											path 		 : google.maps.SymbolPath.CIRCLE,
-											strokeColor	 : '#F7D0C9',
-											scale 		 : 4,
-											strokeWeight : 8,
-											strokeOpacity: 0.9
-										},
-										animation 		 : 'google.maps.Animation.DROP',
-										info 			 : infoBuilder
-									});
-
-									oms.addMarker(marker);  
-									iw.setContent(marker.info);
-									iw.setOptions({maxWidth: 500});
-									iw.open(map, marker);
-									$('#insert-successful').html('Report created successfully.');
-
-								},
-								'error': function(jqXHR, textStatus, errorThrown) {
-									sessionStorage.spam = '1';
-									window.location = 'login.php';
-									alert('Spam detected. You will be logged out.');
-								}
-							});
-						}
-
-					});
-				});
 
 			}
 
-			//Close Complaint
-			function closeComplaint(complaintId) {
-				var confirm = window.confirm("Do you want to close your complaint?");
-				if (confirm) {
-					$.ajax({
-						type 	: "GET",
-						url 	: "close.php?id=" + complaintId,
-						cache 	: true,
-						success : function (html) {
-							$("#label-"+complaintId).attr('class', 'complaint-label label label-danger');
-							$("#label-"+complaintId).html("closed");
-							var availMarkers = oms.getMarkers();
-							var toBeDeleted = $.grep(availMarkers, function(e){ return e.id == complaintId; })[0];
-							toBeDeleted.setMap(null);
-							window.alert("Your complaint has been closed successfully");
-						}
-					});
-				};
-			}
 		</script>
 	</head> 
 
@@ -647,133 +547,47 @@
 					<div class="row">
 						<div class="row options-panel">
 							<div class="options">
-								<button class="btn btn-primary" id="complaints-create">New Complaint</button>
-								<button class="btn btn-primary" id="complaints-show">My Complaints</button>
-								<button class="btn btn-primary" id="trending-show">Trending in your constituency</button>
+								<button class="btn btn-primary" id="trending-show">Trending in your jurisdiction</button>
 							</div>
 						</div>
 					</div>
 					<!--end options-->
-					<!--begin creation form-->
-					<form id="new-complaint" class="complaint-form" action="" method="post" name="form">
-						<fieldset>
-							<div class="form-group">
-								<input class="form-control" data-validation="custom" data-validation-regexp="^([a-zA-Z0-9.!-\s]{10,50})$"  placeholder="Complaint Title" name="title" id="title" type="text">
-							</div>
-							<div class="form-group">
-								<textarea class="form-control" data-validation="custom" data-validation-regexp="^([a-zA-Z0-9.!-\s]{30,300})$" name="description" id="description" placeholder="Complaint Description" rows="4"></textarea>
-							</div>
-							<div class="form-group">
-								<input class="form-control" id="pac-input" placeholder="Location" name="location" type="text">
-							</div>
-							<div class="form-group">
-									<select class="form-control" name="taggedAt" id="taggedAt">
-										<?php
-											//list of officials in the constituency of the user
-											$m = new MongoClient();
-											$db = $m -> map;
-											$collection = $db -> users;
-											$cursor = $collection -> find(array("username" => $_SESSION['username']));
-											$current_const = "";
-											foreach ($cursor as $doc) {
-												$current_const = $doc["constituency"];
-											}
-											$cursor = $collection -> find(array("admin" => 1, "constituency" => $current_const));
-											foreach ($cursor as $doc) {
-												echo '<option value="'.$doc["title"].'">'.$doc["title"].'</option>';
-											}
-										?>
-									</select>
-								</div>
-							<input class="btn btn-lg btn-success btn-block" id="submit-button" value="Submit">
-						</fieldset>
-					</form>
-					<!--end creation form-->
-					<!--begin div to hold success message for complaint creation-->
-					<div id="insert-successful" class="text-center">
-					</div>
-					<!--end div to hold success message for complaint creation-->
-					<!--begin my-complaints-->
-					<div id="my-complaints" class="complaints">
-						<?php
-							$m = new MongoClient();
-							$db = $m -> map;
-							$collection = $db -> reports;
-							$cursor = $collection -> find(
-								array(
-									"username" => $_SESSION["username"]
-								) 
-							) -> sort (
-								array(
-									"status" => (-1)
-								)
-							);
-							foreach ($cursor as $doc) {
-								if ($doc["status"] == "open") {
-									echo "
-										<div class='open-complaint' id='complaint-block-" . $doc["_id"] . "' >\n" . 
-											$doc["title"] . "\n" . 
-											"<div class='complaint-label label label-success' id='label-".$doc["_id"]."'>\n". 
-												$doc["status"] . 
-											"\n</div>\n
-											<i id='plus-". $doc["_id"] . "' onClick=openComplaint('" . $doc["_id"] . "') 
-												class='fa fa-plus' style='color: #337AB7;' title='See More'>
-											</i><br>\n" .
-											"<div class='complaint-info' id='complaint-info-". $doc["_id"] . "'>\n<br>".		
-											 	$doc["description"] . "<br><br>\n<strong>Location:&nbsp;</strong>" . 
-											 	$doc["location"] . "<br>\n<strong>Tagged at:&nbsp;</strong>" . 
-											 	$doc["taggedAt"] . "<br>\n" . 
-											    "<strong>Posted on:</strong>&nbsp;" . date('d-M-Y, H:i', $doc["time"] -> sec ) . "<br>\n
-											    <a style='font-size: 10px;' href='#' 
-													onClick=closeComplaint('" . $doc["_id"] . "')" . 
-													">\n
-													Close Complaint\n
-												</a>\n
-											</div>\n
-										</div>
-										<hr>
-										<br>\n";
-								}
-								else {
-									echo "
-										<div class='closed-complaint' id='complaint-block-" . $doc["_id"] . "' >\n" . 
-									     	$doc["title"] . "\n" . 
-										 	"<div class='complaint-label label label-danger' id='label-".$doc["_id"]."'>\n". 
-										 		$doc["status"] . 
-										 	"\n</div>\n
-											<i id='plus-". $doc["_id"] . "' onClick=openComplaint('" . $doc["_id"] . "') 
-												class='fa fa-plus' style='color: #337AB7;' title='See More'>
-											</i><br>\n" .
-										 	"<div class='complaint-info' id='complaint-info-". $doc["_id"] . "'>\n<br>".
-										 		$doc["description"] . "<br><br>\n<strong>Location:&nbsp;</strong>" . 
-										 		$doc["location"] . "<br>\n<strong>Tagged at:&nbsp;</strong>" . 
-										 		$doc["taggedAt"] . "<br>\n" . 
-										 		"<strong>Posted on:</strong>&nbsp;" . date('d-M-Y, H:i', $doc["time"] -> sec ) . "\n<br>\n
-										 	</div>\n
-										</div>\n
-										<hr>
-										<br>\n";
-								}
-										
-							};
-						?>
-					</div>
-					<!--end my-complaints-->
 					<!--begin trending-->
-					<div id="trending" class="trending-complaints">
+					<div id="trending" class="trending-complaints" style="visibility: visible; height: initial">
 						<?php
 							$m = new MongoClient();
 							$db = $m -> map;
 							$collection = $db -> reports;
-							$cursor = $collection -> find(
-								array(
-									"constituency" => $_SESSION['constituency']
-								)
-							) -> sort (
-								array(
-									"votes" => (-1)
-								)
-							) -> limit(10);
+							if($_SESSION['access'] == "constituency") {
+								$cursor = $collection -> find(
+									array(
+										"constituency" => $_SESSION["constituency"], 
+										"taggedAt" => $_SESSION["username"]
+									)
+								) -> sort(
+									array(
+										"votes" => (-1)
+									)
+								) -> limit(10);
+							}
+							else if($_SESSION['access'] == "district") {
+								$cursor = $collection -> find(
+									array(
+										"district" => $_SESSION["district"]
+									)
+								) -> sort(
+									array(
+										"votes" => (-1)
+									)
+								) -> limit(10);
+							}
+							else {
+								$cursor = $collection -> find() -> sort(
+									array(
+										"votes" => (-1)
+									)
+								) -> limit(10);
+							}
 							foreach ($cursor as $doc) {
 								if ($doc["status"] == "open") {
 									echo "
@@ -796,7 +610,7 @@
 										"<hr>" .
 										"<br>\n";
 								}	
-							}				
+							};
 						?>						
 					</div>
 					<!--end trending-->
@@ -819,8 +633,27 @@
 				$db = $m -> map;
 				$collection = $db -> reports;
 
-				$cursor = $collection -> find(); 
+				//access controls
+				if($_SESSION['access'] == "constituency") {
+					$cursor = $collection -> find(
+						array(
+							"constituency" => $_SESSION["constituency"], 
+							"taggedAt" => $_SESSION["username"]
+						)
+					);
+				}
+				else if($_SESSION['access'] == "district") {
+					$cursor = $collection -> find(
+						array(
+							"district" => $_SESSION["district"], 
+						)
+					);
+				}
+				else {
+					$cursor = $collection -> find();
+				}
 
+				
 				foreach ($cursor as $doc) {
 					//display closed complaints also
 					if (isset($_GET["closed"])) {

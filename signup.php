@@ -63,6 +63,13 @@
                                         <option value="Tambaram">Tambaram</option>
                                     </select>
                                 </div>
+                                <div class="form-group">
+                                    <select class="form-control" name="district">
+                                        <option value="thiruvallur">Thiruvallur</option>
+                                        <option value="chennai">Chennai</option>
+                                        <option value="kancheepuram">Kancheepuram</option>
+                                    </select>
+                                </div>
                                 <div style="text-align: -webkit-center;margin-bottom: 10px;" class="g-recaptcha" data-theme="dark" data-sitekey="6LcbKhETAAAAAG0qN3ebzmdKFqTMCDJI8gv4GWyo"></div>
                                 <input class="btn btn-lg btn-success btn-block" type="submit" value="Sign Up">
                                 <?php

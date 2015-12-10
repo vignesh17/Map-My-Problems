@@ -30,6 +30,7 @@
 		$cpass = (string)$_POST["cpassword"];
 		$email = (string)$_POST["email"];
 		$const = (string)$_POST["constituency"];
+		$dist = (string)$_POST["district"];
 
 		if(strcmp($pass, $cpass) == 0) {
 			$hashpass = md5($pass);
@@ -49,7 +50,7 @@
 			$alreadyExists = (($collection -> count(array('username' => $username))) + ($collection -> count(array('email' => $email))));
 			if(!$alreadyExists) {
 				$code = (string)crc32($email);
-				$user = array('admin' => 0, 'name' => $name, 'username' => $username, 'pass' => $hashpass, 'email' => $email, 'active' => 0, 'verify' => $code, "constituency" => $const);
+				$user = array('district' => $dist, 'admin' => 0, 'name' => $name, 'username' => $username, 'pass' => $hashpass, 'email' => $email, 'active' => 0, 'verify' => $code, "constituency" => $const);
 				$collection -> insert($user);
 				$file = fopen("password.txt", "r") or die("Password not found");
 				$mail = new PHPMailer();
@@ -92,7 +93,7 @@
 
 			$alreadyExists = (($collection -> count(array('username' => $username))) + ($collection -> count(array('email' => $email))));
 			if(!$alreadyExists) {
-				$user = array('admin' => 0, 'name' => $name, 'username' => $username, 'pass' => $hashpass, 'email' => $email, 'active' => 1, 'verify' => crc32($email), "constituency" => $const);
+				$user = array('district' => $dist, 'admin' => 0, 'name' => $name, 'username' => $username, 'pass' => $hashpass, 'email' => $email, 'active' => 1, 'verify' => crc32($email), "constituency" => $const);
 				$collection -> insert($user);
 				header('Location:login.php');
 			}

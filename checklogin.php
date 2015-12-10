@@ -27,6 +27,7 @@
 	    foreach ($cursor as $doc) {
 	        $constituency = $doc["constituency"];
 	        $fullname = $doc["name"];
+	        $dist = $doc["district"];
 	    }
 		$creds = array('username' => $username, 'pass' => $password, 'active' => 1);
 		$count = $collection -> count($creds);

@@ -59,6 +59,20 @@
                                         <option value="Tambaram">Tambaram</option>
                                     </select>
                                 </div>
+                                <div class="form-group">
+                                    <select class="form-control" name="district">
+                                        <option value="thiruvallur">Thiruvallur</option>
+                                        <option value="chennai">Chennai</option>
+                                        <option value="kancheepuram">Kancheepuram</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control" name="access">
+                                        <option value="constituency">Constituency</option>
+                                        <option value="district">District</option>
+                                        <option value="state">State</option>
+                                    </select>
+                                </div>
                                 <input class="btn btn-lg btn-success btn-block" type="submit" value="Sign Up">
                                 <?php
                                 if ($_SESSION['password-mismatch']) {

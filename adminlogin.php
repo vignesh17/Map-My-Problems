@@ -47,12 +47,19 @@
                                 <input class="form-control" data-validation="length" data-validation-length="min8" placeholder="Password" name="password" type="password" value="">
                             </div>
                             <div class="form-group">
-                                    <select class="form-control" name="constituency">
-                                        <option value="Anna Nagar">Anna Nagar</option>
-                                        <option value="Thiruvanmiyur">Thiruvanmiyur</option>
-                                        <option value="Tambaram">Tambaram</option>
-                                    </select>
-                                </div>
+                                <select class="form-control" name="constituency">
+                                    <option value="Anna Nagar">Anna Nagar</option>
+                                    <option value="Thiruvanmiyur">Thiruvanmiyur</option>
+                                    <option value="Tambaram">Tambaram</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control" name="district">
+                                    <option value="thiruvallur">Thiruvallur</option>
+                                    <option value="chennai">Chennai</option>
+                                    <option value="kancheepuram">Kancheepuram</option>
+                                </select>
+                            </div>
                             <div class="form-group">
                                 <ul class="login-helper">
                                     <li class="login-helper-content"><a href="forgot.php">Forgot Password?</a></li>

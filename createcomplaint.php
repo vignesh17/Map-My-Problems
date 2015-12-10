@@ -75,6 +75,7 @@
 					'taggedAt' => $taggedAt,
 					'constituency' => $constituency,
 					'status' => "open",
+					'district' => $dist
 				);
 				$collection -> insert($report);
 				$collection = $db -> attempts;
