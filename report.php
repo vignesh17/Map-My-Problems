@@ -13,7 +13,7 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 		<link rel="stylesheet" type="text/css" href="css/styles.css">
 		<meta charset="utf-8">
-		<title>Map My Problems</title>
+		<title>என் பிரச்சனை கண்டறிவதில்</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.2.43/jquery.form-validator.min.js"></script>
 		<script src="http://maps.google.com/maps/api/js?v=3.9&amp;libraries=places&amp;sensor=false"></script>
@@ -566,13 +566,13 @@
 					<form action="" method="post" name="form">
 						<fieldset>
 							<div class="form-group">
-								<input class="form-control" data-validation="custom" data-validation-regexp="^([a-zA-Z0-9.!-\s]{10,50})$"  placeholder="Complaint Title" name="title" id="title" type="text">
+								<input class="form-control" data-validation="custom" data-validation-regexp="^([a-zA-Z0-9.!-\s]{10,50})$"  placeholder="புகார் தலைப்பு" name="title" id="title" type="text">
 							</div>
 							<div class="form-group">
-								<textarea class="form-control" data-validation="custom" data-validation-regexp="^([a-zA-Z0-9.!-\s]{30,300})$" name="description" id="description" placeholder="Complaint Description" rows="4"></textarea>
+								<textarea class="form-control" data-validation="custom" data-validation-regexp="^([a-zA-Z0-9.!-\s]{30,300})$" name="description" id="description" placeholder="புகார் விளக்கம்" rows="4"></textarea>
 							</div>
 							<div class="form-group">
-								<input class="form-control" id="pac-input" placeholder="Location" name="location" type="text">
+								<input class="form-control" id="pac-input" placeholder="Location" name="இடம்" type="text">
 							</div>
 							<div class="form-group">
 									<select class="form-control" name="taggedAt" id="taggedAt">
